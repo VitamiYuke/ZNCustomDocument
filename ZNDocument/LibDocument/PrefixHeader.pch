@@ -1,0 +1,90 @@
+//
+//  PrefixHeader.pch
+//  ZNDocument
+//
+//  Created by ZhangNanBoy on 16/8/9.
+//  Copyright © 2016年 zhangnanboy. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+// 常用的宏
+
+//屏幕尺寸
+#define SCREENT_WIDTH ([[UIScreen mainScreen] bounds].size.width)
+#define SCREENT_HEIGHT ([[UIScreen mainScreen] bounds].size.height)
+#define NORMAL_HEIGHT (SCREENT_HEIGHT -64)
+// RGB颜色
+#define MyColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+#define MyColorWithAlpha(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
+// 随机色
+#define MyRandomColor [UIColor colorWithRed:arc4random_uniform(255)/255.0 green:arc4random_uniform(255)/255.0 blue:arc4random_uniform(255)/255.0 alpha:1]
+//打印
+#ifdef DEBUG
+#define MyLog(...) NSLog(__VA_ARGS__)
+#else
+#define MyLog(...)
+#endif
+//通知
+#define ZNNoteCenter [NSNotificationCenter defaultCenter]
+//userDefaults
+#define ZNUserDefault [NSUserDefaults standardUserDefaults]
+//字体
+#define MyFont(a) [UIFont systemFontOfSize:a]
+
+//自定义字体
+/**
+ DINPro-Regular
+	Font: DINPro-Bold
+	Font: DINPro-Medium
+ */
+
+#define ZNCustomDinNormalFont(f) ([UIFont fontWithName:@"DINPro-Regular" size:f])
+#define ZNCustomDinMediumFont(f) ([UIFont fontWithName:@"DINPro-Medium" size:f])
+#define ZNCustomDinBoldFont(f) ([UIFont fontWithName:@"DINPro-Bold" size:f])
+
+
+//常用的颜色
+#define CommonRed (MyColor(250, 70, 80))
+#define CommonLineColor (MyColor(220, 220, 220))
+
+//弱引用
+#define znWeakSelf(var)   __weak typeof(var) weakSelf = var
+//强引用
+#define znStrongSelf(var) __strong typeof(var) strongSelf = var
+
+//判断字符串是否为null
+#define strIsEmpty(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length]<1)? YES : NO
+
+//DocumentPath文件名
+#define ZNDocumentPathName ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject])
+
+#define ZNLocalStockPath ([ZNDocumentPathName stringByAppendingPathComponent:@"ZNAllStockInfo.Yuke"])
+#define ZNLocalHotStockPath ([ZNDocumentPathName stringByAppendingPathComponent:@"ZNHotStockInfo.Yuke"])
+
+
+
+
+
+
+//引用的头文件
+//类目
+#import "CategoryDocument/CategoryHeaderFile.h"
+
+#import <MBProgressHUD.h>
+#import "MBProgressHUD+MJ.h"
+#import <LCActionSheet.h>
+#import <UIView+AutoLayout.h>
+#import <UIImageView+WebCache.h>
+//常用方法
+#import "Lib/ZNBasedLibHeader.h"
+//自定义文件的
+#import "ZNCustomDocument/ZNCustomDocumentHeader.h"
+
+
+
+#endif /* PrefixHeader_pch */
