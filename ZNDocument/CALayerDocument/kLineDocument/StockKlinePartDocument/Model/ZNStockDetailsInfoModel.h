@@ -50,7 +50,8 @@
 
 
 
-
+@property (nonatomic, strong) NSString* bgq;
+@property (nonatomic, strong) NSString* jzcsyl;
 
 
 @end

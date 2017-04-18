@@ -38,7 +38,7 @@
 }
 
 
-- (UIView *)stockDetailsView{
+- (ZNStockDetailsView *)stockDetailsView{
     if (!_stockDetailsView) {
         _stockDetailsView = [[ZNStockDetailsView alloc] initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, 0)];
         _stockDetailsView.backgroundColor = [UIColor whiteColor];
@@ -159,6 +159,22 @@
             self.headerView.detailsModel = self.detailsInfoModel;
             self.navView.detaisDescString = self.detailsInfoModel.date;
             [self configureBGColorWithDetailsModel:self.detailsInfoModel];
+            
+            
+            if (self.detailsInfoModel.mgjzc && self.detailsInfoModel.mgsy && self.detailsInfoModel.ltg) {
+                NSString *currentPrice = self.detailsInfoModel.currentPrice;
+                if (currentPrice) {
+                    self.detailsInfoModel.earnings = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.mgsy floatValue]==0?0.00:([currentPrice floatValue]/[self.detailsInfoModel.mgsy floatValue])];
+                    
+                    self.detailsInfoModel.price_to_book = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.mgjzc floatValue]==0?0.00:([currentPrice floatValue]/[self.detailsInfoModel.mgjzc floatValue])];
+                    
+                    self.detailsInfoModel.ltsz = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.ltg floatValue]*([currentPrice floatValue]==0?[self.detailsInfoModel.close floatValue]:[currentPrice floatValue])];
+                    self.detailsInfoModel.zsz = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.zgb floatValue]*([self.detailsInfoModel.currentPrice floatValue]==0?[self.detailsInfoModel.close floatValue]:[currentPrice floatValue])];
+                }
+            }
+            
+            
+            
         }
     } Failure:^{
         
@@ -182,7 +198,39 @@
 //融资信息
 - (void)loadingStockFinanceInfoData{
     [ZNStockDetailsInfoToolManager getStockFinanceWithStockCode:self.stockModel.stockCode Success:^(id responseObject) {
-        
+        NSDictionary *financeDic = (NSDictionary *)responseObject;
+        if (financeDic.count) {
+            [self.detailsInfoModel setValuesForKeysWithDictionary:financeDic];
+            
+            NSString *ltg = @"0";
+            NSString *turnoverRateDesc = @"0.00%";
+            if (self.detailsInfoModel.ltg.length) {
+                ltg = self.detailsInfoModel.ltg;
+            }
+            if ([ltg floatValue]) {
+                CGFloat turnoverRate = [self.detailsInfoModel.volume floatValue] * 100 / [ltg floatValue];
+                turnoverRateDesc = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:turnoverRate];
+                turnoverRateDesc  = [turnoverRateDesc stringByAppendingString:@"%"];
+            }
+            self.detailsInfoModel.turnoverRate = turnoverRateDesc;
+            self.headerView.detailsModel = self.detailsInfoModel;
+            
+            NSString *mgsy = @"0.00";
+            if (self.detailsInfoModel.mgsy.length) {
+                mgsy = self.detailsInfoModel.mgsy;
+            }
+            
+            NSString *currentPrice = self.detailsInfoModel.currentPrice;
+            if (currentPrice) {
+                self.detailsInfoModel.earnings = [NSString stringWithFormat:@"%.2f",[mgsy floatValue]==0?0.00:([currentPrice floatValue]/[mgsy floatValue])];
+                
+                self.detailsInfoModel.price_to_book = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.mgjzc floatValue]==0?0.00:([currentPrice floatValue]/[self.detailsInfoModel.mgjzc floatValue])];
+                
+                self.detailsInfoModel.ltsz = [NSString stringWithFormat:@"%.2f",[ltg floatValue]*([currentPrice floatValue]==0?[self.detailsInfoModel.close floatValue]:[currentPrice floatValue])];
+                self.detailsInfoModel.zsz = [NSString stringWithFormat:@"%.2f",[self.detailsInfoModel.zgb floatValue]*([self.detailsInfoModel.currentPrice floatValue]==0?[self.detailsInfoModel.close floatValue]:[currentPrice floatValue])];
+            }
+ 
+        }
     } Failure:^{
         
     }];
@@ -235,7 +283,9 @@
             self.stockDetailsView.height = _maxDetailsShowHeight;
         } completion:^(BOOL finished) {
             if (finished) {
-                self.stockDetailsView.stockDetailsInfoModel = self.detailsInfoModel;
+                if (self.detailsInfoModel.currentPrice) {
+                    self.stockDetailsView.stockDetailsInfoModel = self.detailsInfoModel;
+                }
             }
         }];
         

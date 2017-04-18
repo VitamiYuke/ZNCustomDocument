@@ -257,28 +257,43 @@
             
             if ([ZNStockDetailsInfoToolManager isIndexWithStockCode:self.stockModel.stockCode]) {
                 self.turnoverTips.text = @"成交额";
-                self.turnoverRateLabel.attributedText = [ZNStockDetailsInfoToolManager configureTurnoverShowWithTurnoverValue:detailsModel.turnover];
+                if (detailsModel.turnover.length) {
+                    self.turnoverRateLabel.attributedText = [ZNStockDetailsInfoToolManager configureTurnoverShowWithTurnoverValue:detailsModel.turnover];
+                }
             }else{
                 self.turnoverTips.text = @"换手率";
-                self.turnoverRateLabel.text = @"9.99%";
+                
+                if (detailsModel.turnoverRate.length) {
+                    self.turnoverRateLabel.text = detailsModel.turnoverRate;
+                }
+                
             }
             
             
         }
-        self.currentPriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.currentPrice.floatValue];
-        self.riseAndFallDescLabel.text = [ZNStockDetailsInfoToolManager configureAppliesAndForeheadWithOriginValue:detailsModel.forehead applies:detailsModel.applies];
+        if (detailsModel.currentPrice.length) {
+            self.currentPriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.currentPrice.floatValue];
+        }
+        if (detailsModel.forehead.length && detailsModel.applies.length) {
+            self.riseAndFallDescLabel.text = [ZNStockDetailsInfoToolManager configureAppliesAndForeheadWithOriginValue:detailsModel.forehead applies:detailsModel.applies];
+        }
         
-        self.openPriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.opening.floatValue];
-        self.closePriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.close.floatValue];
-        
-        CGFloat volumeFloatValue = detailsModel.volume.floatValue;
-        NSString *volumeValue = [ZNStockDetailsInfoToolManager configureStockVolumeShowWithVolume:volumeFloatValue];
-        NSString *volumeUnitDesc = [ZNStockDetailsInfoToolManager getStockVolumeUnitWithVolume:volumeFloatValue];
-        NSMutableAttributedString *volumeAtt = [[NSMutableAttributedString alloc] initWithString:volumeValue];
-        [volumeAtt appendAttributedString:[[NSAttributedString alloc] initWithString:volumeUnitDesc attributes:@{NSFontAttributeName:ZNCustomDinNormalFont(11)}]];
+        if (detailsModel.opening.length) {
+            self.openPriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.opening.floatValue];
+        }
+        if (detailsModel.close.length) {
+            self.closePriceLabel.text = [ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:detailsModel.close.floatValue];
+        }
+        if (detailsModel.volume.length) {
+            CGFloat volumeFloatValue = detailsModel.volume.floatValue;
+            NSString *volumeValue = [ZNStockDetailsInfoToolManager configureStockVolumeShowWithVolume:volumeFloatValue];
+            NSString *volumeUnitDesc = [ZNStockDetailsInfoToolManager getStockVolumeUnitWithVolume:volumeFloatValue];
+            NSMutableAttributedString *volumeAtt = [[NSMutableAttributedString alloc] initWithString:volumeValue];
+            [volumeAtt appendAttributedString:[[NSAttributedString alloc] initWithString:volumeUnitDesc attributes:@{NSFontAttributeName:ZNCustomDinNormalFont(11)}]];
+            self.volumeLabel.attributedText = volumeAtt;
 
-        self.volumeLabel.attributedText = volumeAtt;
-        
+        }
+
     }
 }
 

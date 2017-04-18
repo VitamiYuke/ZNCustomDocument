@@ -97,6 +97,7 @@
         if (model) {
             ZNStockDetailsController *detailsController = [[ZNStockDetailsController alloc] init];
             detailsController.stockModel = model;
+            detailsController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [searchViewController presentViewController:detailsController animated:YES completion:^{
                 
             }];

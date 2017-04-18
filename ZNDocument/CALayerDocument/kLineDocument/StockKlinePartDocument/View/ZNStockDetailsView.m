@@ -291,49 +291,137 @@
         
         
         
+        //成交额 振幅 委比 委差
+        NSString *turnover = @"0";
+        if (stockDetailsInfoModel.turnover.length) {
+            turnover = stockDetailsInfoModel.turnover;
+        }
+        NSMutableAttributedString *turnoverAtt = [self configureShowWithOriginValue:turnover.floatValue];
+        
+        
+        UIColor *appointThanColor = Stock_Gray;
+        if (stockDetailsInfoModel.appointThan.floatValue > 0) {
+            appointThanColor = Stock_Red;
+        }
+        if (stockDetailsInfoModel.appointThan.floatValue < 0){
+            appointThanColor = Stock_Green;
+        }
+        
+        //
+        NSString *committeePoor = @"0";
+        if (stockDetailsInfoModel.committeePoor) {
+            committeePoor = stockDetailsInfoModel.committeePoor;
+        }
+        NSMutableAttributedString *committeeAtt = [self configureShowWithOriginValue:committeePoor.floatValue];
+        
         for (int i = 0; i < self.row1Array.count; i++) {
-//            NSMutableDictionary *dic = self.row1Array[i];
-//            NSString *key = [[dic allKeys] lastObject];
+            NSMutableDictionary *dic = self.row1Array[i];
+            NSString *key = [[dic allKeys] lastObject];
             if (i == 0) {
-                
+                dic[key] = turnoverAtt;
             }
             
             if (i == 1) {
-                
+                dic[key] = [self configureStockInfoValueWithValue:stockDetailsInfoModel.rate styleDic:@{NSForegroundColorAttributeName:MyColor(40, 40, 40),NSFontAttributeName:ZNCustomDinMediumFont(13)}];
             }
             
+            if (i == 2) {
+                dic[key] = [self configureStockInfoValueWithValue:[stockDetailsInfoModel.appointThan stringByAppendingString:@"%"] styleDic:@{NSForegroundColorAttributeName:appointThanColor,NSFontAttributeName:ZNCustomDinMediumFont(13)}];
+            }
+            
+            if (i == 3) {
+                dic[key] = committeeAtt;
+            }
+
         }
-//        self.indexPathRow1.keyValueArray = self.row1Array;
+        self.indexPathRow1.keyValueArray = self.row1Array;
         
+        
+        //流通市值
+        NSString *ltsz = @"0";
+        NSString *zsz = @"0";
+        if (stockDetailsInfoModel.ltsz.length) {
+            ltsz = stockDetailsInfoModel.ltsz;
+        }
+        
+        if (stockDetailsInfoModel.zsz.length) {
+            zsz = stockDetailsInfoModel.zsz;
+        }
+        
+        NSMutableAttributedString *ltszAtt = [self configureShowWithOriginValue:ltsz.floatValue];
+        NSMutableAttributedString *zszAtt = [self configureShowWithOriginValue:zsz.floatValue];
         
         for (int i = 0; i < self.row2Array.count; i++) {
-//            NSMutableDictionary *dic = self.row2Array[i];
-//            NSString *key = [[dic allKeys] lastObject];
+            NSMutableDictionary *dic = self.row2Array[i];
+            NSString *key = [[dic allKeys] lastObject];
             if (i == 0) {
-                
+                dic[key] = ltszAtt;
             }
             
             if (i == 1) {
-                
+               dic[key] = zszAtt;
+            }
+            
+            if (i == 2) {
+                dic[key] = [self configureStockInfoValueWithValue:stockDetailsInfoModel.earnings styleDic:@{NSForegroundColorAttributeName:MyColor(40, 40, 40),NSFontAttributeName:ZNCustomDinMediumFont(13)}];
+            }
+            
+            if (i == 3) {
+                dic[key] = [self configureStockInfoValueWithValue:stockDetailsInfoModel.price_to_book styleDic:@{NSForegroundColorAttributeName:MyColor(40, 40, 40),NSFontAttributeName:ZNCustomDinMediumFont(13)}];
             }
             
         }
-//        self.indexPathRow2.keyValueArray = self.row2Array;
+        self.indexPathRow2.keyValueArray = self.row2Array;
+        
+        NSString *mgsy = @"0";
+        if (stockDetailsInfoModel.mgsy.length) {
+            mgsy = stockDetailsInfoModel.mgsy;
+        }
+        
+        NSString *mgjzc = @"0";
+        if (stockDetailsInfoModel.mgjzc.length) {
+            mgjzc = stockDetailsInfoModel.mgjzc;
+        }
+        
+        NSString *zgb = @"0";
+        NSString *ltg = @"0";
+        
+        if (stockDetailsInfoModel.zgb.length) {
+            zgb = stockDetailsInfoModel.zgb;
+        }
+        
+        if (stockDetailsInfoModel.ltg.length) {
+            ltg = stockDetailsInfoModel.ltg;
+        }
+        
+        NSMutableAttributedString *zgbAtt = [self configureShowWithOriginValue:zgb.floatValue];
+        NSMutableAttributedString *ltgAtt = [self configureShowWithOriginValue:ltg.floatValue];
+        
         
         
         for (int i = 0; i < self.row3Array.count; i++) {
-//            NSMutableDictionary *dic = self.row3Array[i];
-//            NSString *key = [[dic allKeys] lastObject];
+            NSMutableDictionary *dic = self.row3Array[i];
+            NSString *key = [[dic allKeys] lastObject];
             if (i == 0) {
-                
+                dic[key] = [self configureStockInfoValueWithValue:[ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:mgsy.floatValue] styleDic:@{NSForegroundColorAttributeName:MyColor(40, 40, 40),NSFontAttributeName:ZNCustomDinMediumFont(13)}];
             }
             
             if (i == 1) {
-                
+                dic[key] = [self configureStockInfoValueWithValue:[ZNStockDetailsInfoToolManager configureFloatStringWithOriginValue:mgjzc.floatValue] styleDic:@{NSForegroundColorAttributeName:MyColor(40, 40, 40),NSFontAttributeName:ZNCustomDinMediumFont(13)}];
             }
             
+            if (i == 2) {
+                dic[key] = zgbAtt;
+            }
+            
+            if (i == 3) {
+                dic[key] = ltgAtt;
+            }
+            
+            
+            
         }
-//        self.indexPathRow3.keyValueArray = self.row3Array;
+        self.indexPathRow3.keyValueArray = self.row3Array;
         
     }
     
@@ -342,6 +430,19 @@
 }
 
 
+- (NSMutableAttributedString *)configureShowWithOriginValue:(CGFloat )value{
+    NSString *tempValue = [ZNStockDetailsInfoToolManager configureMoneyValueWithOriginValue:value];
+    NSString *tempUnit = [ZNStockDetailsInfoToolManager configureMoneyUnitWithMoney:value];
+    NSMutableAttributedString *tempAtt = [self configureShowValueWithValue:tempValue unitStr:tempUnit textColor:MyColor(40, 40, 40)];
+    return tempAtt;
+}
+
+
+- (NSMutableAttributedString *)configureShowValueWithValue:(NSString *)value unitStr:(NSString *)unitStr textColor:(UIColor *)textColor{
+    NSMutableAttributedString *tempAtt = [[NSMutableAttributedString alloc] initWithString:value attributes:@{NSForegroundColorAttributeName:textColor,NSFontAttributeName:ZNCustomDinMediumFont(13)}];
+    [tempAtt appendAttributedString:[[NSAttributedString alloc] initWithString:unitStr attributes:@{NSFontAttributeName:ZNCustomDinMediumFont(10),NSForegroundColorAttributeName:textColor}]];
+    return tempAtt;
+}
 
 
 

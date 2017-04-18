@@ -292,11 +292,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZNDocument/CALayerDocument/kLineDocument/Model/ZNBasedStockToolManager.m"
-            timestampString = "513656250.799144"
+            timestampString = "514187838.99829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "+startConfigureHotStockInfoFromInternet"
             landmarkType = "7">
          </BreakpointContent>
@@ -330,22 +330,6 @@
             startingLineNumber = "21"
             endingLineNumber = "21"
             landmarkName = "+configureStockDetailsInfoWithDataString:originalData:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ZNDocument/CALayerDocument/kLineDocument/StockKlinePartDocument/View/ZNStockDetailsControllerView.m"
-            timestampString = "513860613.060283"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
-            landmarkName = "-loadingStockDetailsInfoData"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

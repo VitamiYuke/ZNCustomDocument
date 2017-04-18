@@ -45,8 +45,10 @@
 //处理浮点型的字符串变成保留两位小数
 +(NSString *)configureFloatStringWithOriginValue:(CGFloat )floatValue;
 
-
-
+//配置货币单位
++(NSString *)configureMoneyUnitWithMoney:(CGFloat )moneyValue;
+//货币的数量
++(NSString *)configureMoneyValueWithOriginValue:(CGFloat )originValue;
 
 
 //获取全部股票

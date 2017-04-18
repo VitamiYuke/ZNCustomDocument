@@ -38,11 +38,50 @@
         
         infoModel.dataStringArray = componentArray;
         
+        //振幅
+        if (infoModel.close.floatValue == 0 || !infoModel.close) {
+            infoModel.rate = @"0.00%";
+        }else{
+            CGFloat rateFloat = (infoModel.maxPrice.floatValue - infoModel.minPrice.floatValue)/infoModel.close.floatValue * 100;
+            NSString *rate = [self configureFloatStringWithOriginValue:rateFloat];
+            infoModel.rate = [rate stringByAppendingString:@"%"];
+        }
+        
+        if (componentArray.count > 30) {
+            infoModel.appointThan = [self calculationStringPlusString:componentArray[16] buy2:componentArray[17] buy3:componentArray[18] buy4:componentArray[19] buy5:componentArray[20] sell1:componentArray[26] sell2:componentArray[27] sell3:componentArray[28] sell4:componentArray[29] sell5:componentArray[30] string:@"委比"];
+            infoModel.committeePoor = [self calculationStringPlusString:componentArray[16] buy2:componentArray[17] buy3:componentArray[18] buy4:componentArray[19] buy5:componentArray[20] sell1:componentArray[26] sell2:componentArray[27] sell3:componentArray[28] sell4:componentArray[29] sell5:componentArray[30] string:@"委差"];
+        }else{
+            infoModel.appointThan = @"0.00";
+            infoModel.committeePoor = @"0.00";
+        }
+        
+        
+        
+        
+        
 
         return infoModel;
     }
     return originalModel;
 }
+
+
+//委比委差
++ (NSString*) calculationStringPlusString:(NSString*)buy1 buy2:(NSString*)buy2 buy3:(NSString*)buy3 buy4:(NSString*)buy4 buy5:(NSString*)buy5 sell1:(NSString*)sell1 sell2:(NSString*)sell2 sell3:(NSString*)sell3 sell4:(NSString*)sell4 sell5:(NSString*)sell5 string:(NSString*)string
+{
+    CGFloat buy = [buy1 floatValue]+[buy2 floatValue]+[buy3 floatValue]+[buy4 floatValue]+[buy5 floatValue];
+    CGFloat sell = [sell1 floatValue]+[sell2 floatValue]+[sell3 floatValue]+[sell4 floatValue]+[sell5 floatValue];
+    if ([string isEqualToString:@"委比"]) {
+        return [NSString stringWithFormat:@"%.2f",((buy-sell)/(buy+sell))*100];
+    }
+    
+    if ([string isEqualToString:@"委差"]) {
+        return [NSString stringWithFormat:@"%.0f",(fabs (buy-sell))];
+    }
+    return @"";
+    
+}
+
 
 
 + (NSString *)configureAppliesAndForeheadWithOriginValue:(NSString *)forehead applies:(NSString *)applies{
@@ -52,7 +91,6 @@
     
     NSString *tempForString = forValue > 0 ? [NSString stringWithFormat:@"+%@",[self configureFloatStringWithOriginValue:forValue]]:[self configureFloatStringWithOriginValue:forValue];
     NSString *tempAppString = appliesValue > 0 ? [NSString stringWithFormat:@"+%@",[self configureFloatStringWithOriginValue:appliesValue]]:[self configureFloatStringWithOriginValue:appliesValue];;
-
     
     return [[NSString stringWithFormat:@"%@  %@",tempForString,tempAppString] stringByAppendingString:@"%"];
 }

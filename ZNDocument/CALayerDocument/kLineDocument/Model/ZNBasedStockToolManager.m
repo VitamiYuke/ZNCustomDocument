@@ -12,6 +12,28 @@
 
 @implementation ZNBasedStockToolManager
 
++ (NSString *)configureMoneyUnitWithMoney:(CGFloat)moneyValue{
+    
+    if (moneyValue > 10000.0 && moneyValue < 100000000.0) {
+        return @"万";
+    }
+    if (moneyValue > 100000000.0) {
+        return @"亿";
+    }
+    return @"";
+}
+
++ (NSString *)configureMoneyValueWithOriginValue:(CGFloat)originValue{
+    
+    if (originValue > 10000.0 && originValue < 100000000.0) {
+        return [self configureFloatStringWithOriginValue:originValue/10000];
+    }
+    if (originValue > 100000000.0) {
+        return [self configureFloatStringWithOriginValue:originValue/100000000.0];
+    }
+    
+    return [self configureFloatStringWithOriginValue:originValue];
+}
 
 
 
