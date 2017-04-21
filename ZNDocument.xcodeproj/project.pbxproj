@@ -25,6 +25,10 @@
 		6D0C9ACB1E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9ACA1E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.m */; };
 		6D0C9AD41E9E398C0059606C /* ZNStockDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9AD31E9E398C0059606C /* ZNStockDetailsView.m */; };
 		6D0C9AD71E9F0BA80059606C /* ZNStockDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9AD61E9F0BA80059606C /* ZNStockDetailsCell.m */; };
+		6D13FFB21EA7332C003B4005 /* ZNRecordVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */; };
+		6D13FFB51EA73343003B4005 /* ZNRecordVideoControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB41EA73343003B4005 /* ZNRecordVideoControllerView.m */; };
+		6D13FFB81EA739BC003B4005 /* ZNRecordVideoToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB71EA739BC003B4005 /* ZNRecordVideoToolManager.m */; };
+		6D13FFBA1EA8CCC4003B4005 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D13FFB91EA8CCC4003B4005 /* ReplayKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		6D1E20FD1E9775BA002A4350 /* ZNSearchStockModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E20FC1E9775BA002A4350 /* ZNSearchStockModel.m */; };
 		6D1E21001E977D20002A4350 /* ZNBasedStockToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E20FF1E977D20002A4350 /* ZNBasedStockToolManager.m */; };
 		6D1E21031E9780F1002A4350 /* ZNAppDelegateConfigureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E21021E9780F1002A4350 /* ZNAppDelegateConfigureManager.m */; };
@@ -409,6 +413,13 @@
 		6D0C9AD31E9E398C0059606C /* ZNStockDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsView.m; sourceTree = "<group>"; };
 		6D0C9AD51E9F0BA80059606C /* ZNStockDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNStockDetailsCell.h; sourceTree = "<group>"; };
 		6D0C9AD61E9F0BA80059606C /* ZNStockDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsCell.m; sourceTree = "<group>"; };
+		6D13FFB01EA7332C003B4005 /* ZNRecordVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoController.h; sourceTree = "<group>"; };
+		6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNRecordVideoController.m; sourceTree = "<group>"; };
+		6D13FFB31EA73343003B4005 /* ZNRecordVideoControllerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoControllerView.h; sourceTree = "<group>"; };
+		6D13FFB41EA73343003B4005 /* ZNRecordVideoControllerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNRecordVideoControllerView.m; sourceTree = "<group>"; };
+		6D13FFB61EA739BC003B4005 /* ZNRecordVideoToolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoToolManager.h; sourceTree = "<group>"; };
+		6D13FFB71EA739BC003B4005 /* ZNRecordVideoToolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNRecordVideoToolManager.m; sourceTree = "<group>"; };
+		6D13FFB91EA8CCC4003B4005 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		6D1E20FB1E9775BA002A4350 /* ZNSearchStockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSearchStockModel.h; sourceTree = "<group>"; };
 		6D1E20FC1E9775BA002A4350 /* ZNSearchStockModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSearchStockModel.m; sourceTree = "<group>"; };
 		6D1E20FE1E977D20002A4350 /* ZNBasedStockToolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNBasedStockToolManager.h; sourceTree = "<group>"; };
@@ -1028,6 +1039,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D13FFBA1EA8CCC4003B4005 /* ReplayKit.framework in Frameworks */,
 				6D205F231E48923200D5CB80 /* WebP.framework in Frameworks */,
 				6DCC76CC1DCC7F2600E3B69D /* AudioToolbox.framework in Frameworks */,
 				6DCC76CE1DCC7F6700E3B69D /* AVFoundation.framework in Frameworks */,
@@ -1102,6 +1114,43 @@
 		6D0558AE1DB08A18003021AC /* View */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6D13FFAC1EA73304003B4005 /* RecordVideoDocument */ = {
+			isa = PBXGroup;
+			children = (
+				6D13FFAD1EA73304003B4005 /* Controller */,
+				6D13FFAE1EA73304003B4005 /* Model */,
+				6D13FFAF1EA73304003B4005 /* View */,
+			);
+			path = RecordVideoDocument;
+			sourceTree = "<group>";
+		};
+		6D13FFAD1EA73304003B4005 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6D13FFB01EA7332C003B4005 /* ZNRecordVideoController.h */,
+				6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6D13FFAE1EA73304003B4005 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6D13FFB61EA739BC003B4005 /* ZNRecordVideoToolManager.h */,
+				6D13FFB71EA739BC003B4005 /* ZNRecordVideoToolManager.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6D13FFAF1EA73304003B4005 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6D13FFB31EA73343003B4005 /* ZNRecordVideoControllerView.h */,
+				6D13FFB41EA73343003B4005 /* ZNRecordVideoControllerView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1769,6 +1818,7 @@
 		6D60756A1DC9E5A500B051FB /* LiveDocument */ = {
 			isa = PBXGroup;
 			children = (
+				6D13FFAC1EA73304003B4005 /* RecordVideoDocument */,
 				6D60756B1DC9E5A500B051FB /* Controller */,
 				6D60756C1DC9E5A500B051FB /* Lib */,
 				6D60756D1DC9E5A500B051FB /* Model */,
@@ -2218,6 +2268,7 @@
 		88B5FCCFB9503B97399FAAA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6D13FFB91EA8CCC4003B4005 /* ReplayKit.framework */,
 				6DCC76DF1DCC805D00E3B69D /* VideoToolbox.framework */,
 				6DCC76DD1DCC804D00E3B69D /* QuartzCore.framework */,
 				6DCC76DB1DCC804700E3B69D /* OpenGLES.framework */,
@@ -3003,6 +3054,7 @@
 				6D205E441E488B9500D5CB80 /* YYTextContainerView.m in Sources */,
 				6D81BBA31E135B8C002C2267 /* ZLThumbnailViewController.m in Sources */,
 				6D205EB51E48908D00D5CB80 /* YYTextMarkdownExample.m in Sources */,
+				6D13FFB81EA739BC003B4005 /* ZNRecordVideoToolManager.m in Sources */,
 				6D205D521E48434800D5CB80 /* JKAssetsGroupCell.m in Sources */,
 				6DD82C961DD1AC3A0003F4AD /* ZNLivePlayListController.m in Sources */,
 				CDBEA8981D618948007253E1 /* ZNBesselTestController.m in Sources */,
@@ -3072,6 +3124,7 @@
 				6D205E191E488B9400D5CB80 /* NSNotificationCenter+YYAdd.m in Sources */,
 				6D205E4A1E488B9500D5CB80 /* YYTextLine.m in Sources */,
 				6D83B0461E6D4B1F00B469F0 /* ZNVerticalScreenContainer.m in Sources */,
+				6D13FFB21EA7332C003B4005 /* ZNRecordVideoController.m in Sources */,
 				6D205D5B1E48434800D5CB80 /* PhotoAlbumManager.m in Sources */,
 				6DD3E25C1E66BD9A00DC52D3 /* ZNNetworkManager.m in Sources */,
 				6D205EB71E48908D00D5CB80 /* YYTextBindingExample.m in Sources */,
@@ -3211,6 +3264,7 @@
 				6D205E5E1E488B9500D5CB80 /* YYSentinel.m in Sources */,
 				6D205EEB1E48914000D5CB80 /* T1StatusLayout.m in Sources */,
 				6D205F0A1E48916D00D5CB80 /* WBStatusComposeTextParser.m in Sources */,
+				6D13FFB51EA73343003B4005 /* ZNRecordVideoControllerView.m in Sources */,
 				6D0319BC1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.m in Sources */,
 				6DF5BE0A1DD1DC6400FCEFBB /* ZNLiveCollectionController.m in Sources */,
 				6D205E4C1E488B9500D5CB80 /* YYTextSelectionView.m in Sources */,

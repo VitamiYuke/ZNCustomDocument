@@ -13,19 +13,97 @@
 #import "ZNAVPlayerView.h"
 #import "ZNVideoPlayerController.h"
 #import "ZNPlayerView.h"
-@interface ZNLiveTestController ()
+#import "ZNRecordVideoController.h"
+#import <ReplayKit/ReplayKit.h>
+@interface ZNLiveTestController ()<RPPreviewViewControllerDelegate>
 //@property(nonatomic, strong)ZNAVPlayerView *plaver;
 
 @end
 
 @implementation ZNLiveTestController
 
+#pragma mark --- 全凭录制
+
+- (void)startScreenRecord{
+    
+    
+    if ([UIDevice currentDevice].systemVersion.floatValue < 9.0) {
+        [MBProgressHUD showError:@"9.0以下系统不支持"];
+        return;
+    }
+    
+    
+    if (![[RPScreenRecorder sharedRecorder] isAvailable]) {
+        MyLog(@"不支持ReplayKit录制");
+    }
+    
+    [MBProgressHUD showMessage:@"正在初始化录制设置~"];
+    
+    [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:NO handler:^(NSError * _Nullable error) {
+        [MBProgressHUD hideHUD];
+        
+        if (error) {
+            [MBProgressHUD showError:[NSString stringWithFormat:@"配置错误:%@",[error localizedDescription]]];
+        }else{
+            [MBProgressHUD showSuccess:@"开始录制~"];
+        }
+        
+    }];
+    
+    
+    
+    
+}
+
+- (void)endScreenRecord{
+    
+    znWeakSelf(self);
+    [[RPScreenRecorder sharedRecorder] stopRecordingWithHandler:^(RPPreviewViewController * _Nullable previewViewController, NSError * _Nullable error) {
+        if (error) {
+            [MBProgressHUD showError:[NSString stringWithFormat:@"停止错误:%@",[error localizedDescription]]];
+        }else{
+            previewViewController.previewControllerDelegate = weakSelf;
+            
+            [self presentViewController:previewViewController animated:YES completion:NULL];
+            
+        }
+    }];
+    
+}
+
+
+#pragma mark - 预览回调
+- (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
+{
+    [previewController dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)previewController:(RPPreviewViewController *)previewController didFinishWithActivityTypes:(NSSet<NSString *> *)activityTypes
+{
+    MyLog(@"活跃的类型:%@",activityTypes);
+    
+    if ([activityTypes containsObject:@"com.apple.UIKit.activity.SaveToCameraRoll"]) {
+        [MBProgressHUD showSuccess:@"保存到相册成功"];
+    }
+    
+    if ([activityTypes containsObject:@"com.apple.UIKit.activity.CopyToPasteboard"]) {
+        [MBProgressHUD showSuccess:@"复制到粘贴板成功"];
+    }
+    
+}
+
+
+
+
+
+#pragma mark -----
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     __weak typeof(self) weakSelf = self;
-    ZNTestButton *playBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(40, 50, 100, 50) title:@"直播列表" action:^{
+    ZNTestButton *playBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(50, 50, 100, 50) title:@"直播列表" action:^{
         [weakSelf.navigationController pushViewController:[[ZNLivePlayListController alloc] init] animated:YES];
     }];
     [self.view addSubview:playBtn];
@@ -49,7 +127,7 @@
 //    [sysPlayer prepareToPlayMovie];
 //    _plaver = sysPlayer;
     
-    ZNTestButton *playUrlBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(40, 150, 100, 50) title:@"播放连接" action:^{
+    ZNTestButton *playUrlBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(50, 150, 100, 50) title:@"播放连接" action:^{
 //        NSString *path = [[NSBundle mainBundle] pathForResource:@"keep.mp4" ofType:nil];
 //        NSURL *url = [NSURL fileURLWithPath:path];
 //        [weakPalyer changePlayNewMovieWithUrl:url];
@@ -71,6 +149,24 @@
 //    [self.view addSubview:playerView];
     
     
+    ZNTestButton *recordVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(200, 150, 100, 50) title:@"录制" action:^{
+        [weakSelf presentViewController:[[ZNRecordVideoController alloc] init] animated:YES completion:NULL];
+        
+    }];
+    [self.view addSubview:recordVideoBtn];
+    
+    
+    ZNTestButton *recordScreenVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(50, 250, 100, 50) title:@"全屏录制" action:^{
+        [weakSelf startScreenRecord];
+    }];
+    [self.view addSubview:recordScreenVideoBtn];
+    
+    
+    ZNTestButton *stopRecordVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(200, 250, 100, 50) title:@"停止录制" action:^{
+        [weakSelf endScreenRecord];
+        
+    }];
+    [self.view addSubview:stopRecordVideoBtn];
     
 }
 
