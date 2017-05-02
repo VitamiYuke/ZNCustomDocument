@@ -202,10 +202,14 @@
         if (financeDic.count) {
             [self.detailsInfoModel setValuesForKeysWithDictionary:financeDic];
             
+            
+            
             NSString *ltg = @"0";
             NSString *turnoverRateDesc = @"0.00%";
-            if (self.detailsInfoModel.ltg.length) {
+            if ([self.detailsInfoModel.ltg isKindOfClass:[NSString class]]&&self.detailsInfoModel.ltg.length) {
                 ltg = self.detailsInfoModel.ltg;
+            }else{
+                self.detailsInfoModel.ltg = [NSString stringWithFormat:@"%@",self.detailsInfoModel.ltg];
             }
             if ([ltg floatValue]) {
                 CGFloat turnoverRate = [self.detailsInfoModel.volume floatValue] * 100 / [ltg floatValue];
@@ -216,8 +220,10 @@
             self.headerView.detailsModel = self.detailsInfoModel;
             
             NSString *mgsy = @"0.00";
-            if (self.detailsInfoModel.mgsy.length) {
+            if ([self.detailsInfoModel.mgsy isKindOfClass:[NSString class]] && self.detailsInfoModel.mgsy.length) {
                 mgsy = self.detailsInfoModel.mgsy;
+            }else{
+                self.detailsInfoModel.mgsy = [NSString stringWithFormat:@"%@",self.detailsInfoModel.mgsy];
             }
             
             NSString *currentPrice = self.detailsInfoModel.currentPrice;

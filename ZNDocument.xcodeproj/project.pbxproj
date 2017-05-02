@@ -321,6 +321,7 @@
 		6DED520E1E9793A200097D6F /* ZNStockDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED520D1E9793A200097D6F /* ZNStockDetailsController.m */; };
 		6DF0C1E11E640598008B884C /* ZNDownProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF0C1E01E640598008B884C /* ZNDownProgress.m */; };
 		6DF5BE0A1DD1DC6400FCEFBB /* ZNLiveCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF5BE091DD1DC6400FCEFBB /* ZNLiveCollectionController.m */; };
+		6DFE8C251EB07A020050A02E /* ODRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFE8C241EB07A020050A02E /* ODRefreshControl.m */; };
 		CD092DAB1D59ECF500458BF2 /* ExpressTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD092DAA1D59ECF500458BF2 /* ExpressTestController.m */; };
 		CD1C73B81D5980D2004AFCCF /* MBProgressHUD+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1C73B71D5980D2004AFCCF /* MBProgressHUD+MJ.m */; };
 		CD1C73BF1D5983AB004AFCCF /* ZNWebTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1C73BE1D5983AB004AFCCF /* ZNWebTestController.m */; };
@@ -951,6 +952,8 @@
 		6DF0C1E01E640598008B884C /* ZNDownProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNDownProgress.m; sourceTree = "<group>"; };
 		6DF5BE081DD1DC6400FCEFBB /* ZNLiveCollectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNLiveCollectionController.h; sourceTree = "<group>"; };
 		6DF5BE091DD1DC6400FCEFBB /* ZNLiveCollectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNLiveCollectionController.m; sourceTree = "<group>"; };
+		6DFE8C231EB07A020050A02E /* ODRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODRefreshControl.h; sourceTree = "<group>"; };
+		6DFE8C241EB07A020050A02E /* ODRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODRefreshControl.m; sourceTree = "<group>"; };
 		AC8ABFEC38C367D1AA09D8DD /* libPods-ZNDocument.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZNDocument.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD092DA91D59ECF500458BF2 /* ExpressTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpressTestController.h; sourceTree = "<group>"; };
 		CD092DAA1D59ECF500458BF2 /* ExpressTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpressTestController.m; sourceTree = "<group>"; };
@@ -1209,6 +1212,7 @@
 		6D205D5D1E48785200D5CB80 /* GoodDemoCollection */ = {
 			isa = PBXGroup;
 			children = (
+				6DFE8C221EB079DB0050A02E /* RefreshAnimationDocument */,
 				6DED51F51E97933200097D6F /* SearchDocument */,
 				6D205D5E1E48785200D5CB80 /* TableViewPerformanceOptimization */,
 				6D205D5F1E48788E00D5CB80 /* ZNGoodDemoCollectionTestController.h */,
@@ -2265,6 +2269,15 @@
 			path = PYSearch;
 			sourceTree = "<group>";
 		};
+		6DFE8C221EB079DB0050A02E /* RefreshAnimationDocument */ = {
+			isa = PBXGroup;
+			children = (
+				6DFE8C231EB07A020050A02E /* ODRefreshControl.h */,
+				6DFE8C241EB07A020050A02E /* ODRefreshControl.m */,
+			);
+			path = RefreshAnimationDocument;
+			sourceTree = "<group>";
+		};
 		88B5FCCFB9503B97399FAAA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -3120,6 +3133,7 @@
 				6DCA26751E964A650043A6D7 /* UIBarButtonItem+Extension.m in Sources */,
 				6DED52051E97933200097D6F /* NSBundle+PYSearchExtension.m in Sources */,
 				CDBD07FC1D755132009FF019 /* JSONKit.m in Sources */,
+				6DFE8C251EB07A020050A02E /* ODRefreshControl.m in Sources */,
 				CD2DDEEF1D58814500DF4EB0 /* ZNViewController.m in Sources */,
 				6D205E191E488B9400D5CB80 /* NSNotificationCenter+YYAdd.m in Sources */,
 				6D205E4A1E488B9500D5CB80 /* YYTextLine.m in Sources */,
