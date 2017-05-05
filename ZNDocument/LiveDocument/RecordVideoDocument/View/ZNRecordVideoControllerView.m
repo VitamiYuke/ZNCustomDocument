@@ -9,7 +9,9 @@
 #import "ZNRecordVideoControllerView.h"
 #import "ZNRecordVideoToolManager.h"
 #import "ZNBasedToolManager.h"
-@interface ZNRecordVideoControllerView ()<UIAlertViewDelegate>
+#import "GPUImage.h"
+#import "ZNSmallVideoPlayerLayer.h"
+@interface ZNRecordVideoControllerView ()<UIAlertViewDelegate,UIGestureRecognizerDelegate>
 @property(nonatomic, strong)UIButton *dismissBtn;
 @property(nonatomic, strong)ZNRecordVideoToolManager *videoManager;
 @property(nonatomic, strong)UIButton *changeCameraBtn;
@@ -22,6 +24,10 @@
 @property(nonatomic, strong)UILabel *tipsLabel;
 @property(nonatomic, strong)UIButton *cancelBtn;
 @property(nonatomic, strong)UIButton *commitBtn;
+@property(nonatomic, strong)UITapGestureRecognizer *doubleTapGesture;
+@property(nonatomic, strong)UITapGestureRecognizer *focusingGesture;
+@property(nonatomic, strong)UIPinchGestureRecognizer *pinchGesture;
+@property(nonatomic, strong)ZNSmallVideoPlayerLayer *player;
 @end
 
 
@@ -32,6 +38,8 @@
     CGFloat _hiddenX;
     CGFloat _cancelShowX;
     CGFloat _commitShowX;
+    BOOL _canFocusAgain;
+    CGPoint _focusPoint;
 }
 
 
@@ -136,6 +144,7 @@
 
 - (void)configureData{
     self.isFrontCamera = NO;
+    _canFocusAgain = YES;
     CGFloat normalOutSideRadiu = 75/2;
     _outSideCircleFrame = CGRectMake(SCREENT_WIDTH/2 - normalOutSideRadiu, SCREENT_HEIGHT - normalOutSideRadiu*2 - 50, normalOutSideRadiu*2, normalOutSideRadiu*2); //74 max 180/ 120  inside 80 60 / 52  40
     _circleCenterPoint = CGPointMake(_outSideCircleFrame.origin.x + normalOutSideRadiu, _outSideCircleFrame.origin.y + normalOutSideRadiu);
@@ -176,6 +185,12 @@
 
 #pragma mark - 切换摄像头
 - (void)changeCameraAction{
+    
+    if (self.outSideCirce.hidden) {
+        MyLog(@"都没显示。弄啥咧");
+        return;
+    }
+
     if (![self.videoManager isAvailableWithCamera]) {
         MyLog(@"没有访问相机权限");
         return;
@@ -303,6 +318,8 @@
     self.outSideCirce.hidden = YES;
     self.inSideCircle.hidden = YES;
     self.theRingCircle.hidden = YES;
+    self.dismissBtn.hidden = YES;
+    self.changeCameraBtn.hidden = YES;
     [self.outSideCirce setPath:[self normalOutSideCirclePath].CGPath];
     [self.inSideCircle setPath:[self normalInSideCirclePath].CGPath];
     [self.videoManager endRecordVideo];
@@ -319,11 +336,15 @@
         self.cancelBtn.x = _cancelShowX;
         self.commitBtn.x = _commitShowX;
     } completion:^(BOOL finished) {
-        
-        
-        
     }];
     
+    
+//    //进行视频预览
+    
+    if (self.videoManager.recordFileURL) {
+        [self.layer insertSublayer:self.player atIndex:1];
+        self.player.video_url = self.videoManager.recordFileURL;
+    }
     
 }
 
@@ -342,13 +363,24 @@
             self.inSideCircle.hidden = NO;
             self.theRingCircle.hidden = NO;
             self.tipsLabel.hidden = NO;
+            self.dismissBtn.hidden = NO;
+            self.changeCameraBtn.hidden = NO;
         }
     }];
+    
+    
+    if (self.player.superlayer) {
+        [self.player removeFromSuperlayer];
+    }
+      
     
 }
 
 //确认使用的视频
 - (void)commitTheRecordedVideoAction{
+    if (self.player.superlayer) {
+        [self.player removeFromSuperlayer];
+    }
     [self.videoManager saveRecordVideoWithFileURL:self.videoManager.recordFileURL];
     [self dismissAction];
 }
@@ -378,6 +410,9 @@
 
 - (void)configureGesture{
     [self addGestureRecognizer:self.longPressGesture];
+    [self addGestureRecognizer:self.doubleTapGesture];
+    [self addGestureRecognizer:self.focusingGesture];
+    [self addGestureRecognizer:self.pinchGesture];
 }
 
 
@@ -417,19 +452,136 @@
 
 
 
+#pragma mark - 双击切换镜头
+- (UITapGestureRecognizer *)doubleTapGesture{
+    if (!_doubleTapGesture) {
+        _doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCameraAction)];
+        _doubleTapGesture.numberOfTapsRequired = 2;
+        
+    }
+    return _doubleTapGesture;
+}
+
+
+#pragma mark - 聚焦
+- (UITapGestureRecognizer *)focusingGesture{
+    if (!_focusingGesture) {
+        _focusingGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focusingAction:)];
+    }
+    return _focusingGesture;
+}
+
+- (void)focusingAction:(UITapGestureRecognizer *)sender{
+    
+    if (self.outSideCirce.hidden) {
+        MyLog(@"都没显示。弄啥咧");
+        return;
+    }
+    
+    CGPoint touchPoint = [sender locationInView:self];
+    MyLog(@"点击的位置:%@",NSStringFromCGPoint(touchPoint));
+    
+    if (!_canFocusAgain) {
+        MyLog(@"刚刚聚焦 别瞎弄");
+        return;
+    }
+    
+    if (touchPoint.y > _outSideCircleFrame.origin.y) {
+        MyLog(@"太低了 别瞎弄");
+        return;
+    }
+
+    CAShapeLayer *focusLayer = self.videoManager.focusingLayer;
+    if (focusLayer) {
+        _canFocusAgain = NO;
+        _focusPoint = touchPoint;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        CABasicAnimation *focusAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        focusAnimation.fromValue = (__bridge id)[self getFocusingCircleWithRadius:50 centerPoint:_focusPoint].CGPath;
+        focusAnimation.toValue = (__bridge id)[self getFocusingCircleWithRadius:15 centerPoint:_focusPoint].CGPath;
+        focusAnimation.duration = 0.15;
+        focusAnimation.removedOnCompletion = NO;
+        focusAnimation.fillMode = kCAFillModeForwards;
+        [focusLayer addAnimation:focusAnimation forKey:@"focusAnimation"];
+        [self.videoManager configureCameraFocusingWithPoint:_focusPoint];
+        [self performSelector:@selector(backAnimation:) withObject:focusLayer afterDelay:0.15];
+        [self performSelector:@selector(focusLayerFade:) withObject:focusLayer afterDelay:2.2];
+  
+    }
+    
+    
+    
+}
+
+
+- (void)backAnimation:(id )sender{
+    if (sender && [sender isKindOfClass:[CAShapeLayer class]]) {
+        CAShapeLayer *focusLayer = (CAShapeLayer *)sender;
+
+        CABasicAnimation *backAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        backAnimation.fromValue = (__bridge id)[self getFocusingCircleWithRadius:15 centerPoint:_focusPoint].CGPath;
+        backAnimation.toValue = (__bridge id)[self getFocusingCircleWithRadius:25 centerPoint:_focusPoint].CGPath;
+        backAnimation.duration = 0.2;
+        backAnimation.removedOnCompletion = NO;
+        backAnimation.fillMode = kCAFillModeForwards;
+        [focusLayer addAnimation:backAnimation forKey:@"backAnimation"];
+    }
+}
+
+- (void)focusLayerFade:(id )sender{
+    if (sender && [sender isKindOfClass:[CAShapeLayer class]]) {
+        CAShapeLayer *focusLayer = (CAShapeLayer *)sender;
+        [focusLayer removeAllAnimations];
+        [focusLayer setPath:[UIBezierPath bezierPath].CGPath];
+    }
+    _canFocusAgain = YES;
+}
 
 
 
 
+- (UIBezierPath *)getFocusingCircleWithRadius:(CGFloat )radius centerPoint:(CGPoint )centerPoint{
+    return [UIBezierPath bezierPathWithArcCenter:centerPoint radius:radius startAngle:0 endAngle:2*M_PI clockwise:YES];
+}
 
+#pragma mark - 设置焦距
+- (UIPinchGestureRecognizer *)pinchGesture{
+    if (!_pinchGesture) {
+        _pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(configureFocusLength:)];
+//        _pinchGesture.delegate = self;
+    }
+    return _pinchGesture;
+}
 
+- (void)configureFocusLength:(UIPinchGestureRecognizer *)sender{
+    
+    if (self.outSideCirce.hidden) {
+        MyLog(@"都没显示。弄啥咧");
+        return;
+    }
 
+    MyLog(@"缩放倍数:%.2f",sender.scale);
+    if (sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateChanged) {
+        [self.videoManager configureCameraFocusingLengthWithScale:sender.scale];
+    }
+    
+    sender.scale = 1;
+}
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(nonnull UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 
-
-
-
-
+#pragma mark - 录制完 播放
+- (ZNSmallVideoPlayerLayer *)player{
+    if (!_player) {
+        _player = [ZNSmallVideoPlayerLayer layer];
+        _player.frame = self.bounds;
+        _player.backgroundColor = [UIColor blackColor].CGColor;
+    }
+    return _player;
+}
 
 
 

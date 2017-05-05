@@ -15,6 +15,7 @@
 #import "ZNPlayerView.h"
 #import "ZNRecordVideoController.h"
 #import <ReplayKit/ReplayKit.h>
+#import "ZNFullScreenRecordConsoleWindow.h"
 @interface ZNLiveTestController ()<RPPreviewViewControllerDelegate>
 //@property(nonatomic, strong)ZNAVPlayerView *plaver;
 
@@ -35,20 +36,26 @@
     
     if (![[RPScreenRecorder sharedRecorder] isAvailable]) {
         MyLog(@"不支持ReplayKit录制");
+        [MBProgressHUD showError:@"不支持ReplayKit录制"];
+        return;
     }
     
-    [MBProgressHUD showMessage:@"正在初始化录制设置~"];
+    [[ZNFullScreenRecordConsoleWindow shareZNFullScreenRecordConsoleWindow] showMenu];
     
-    [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:NO handler:^(NSError * _Nullable error) {
-        [MBProgressHUD hideHUD];
-        
-        if (error) {
-            [MBProgressHUD showError:[NSString stringWithFormat:@"配置错误:%@",[error localizedDescription]]];
-        }else{
-            [MBProgressHUD showSuccess:@"开始录制~"];
-        }
-        
-    }];
+    
+//
+//    [MBProgressHUD showMessage:@"正在初始化录制设置~"];
+//    
+//    [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:NO handler:^(NSError * _Nullable error) {
+//        [MBProgressHUD hideHUD];
+//        
+//        if (error) {
+//            [MBProgressHUD showError:[NSString stringWithFormat:@"配置错误:%@",[error localizedDescription]]];
+//        }else{
+//            [MBProgressHUD showSuccess:@"开始录制~"];
+//        }
+//        
+//    }];
     
     
     
@@ -57,17 +64,24 @@
 
 - (void)endScreenRecord{
     
-    znWeakSelf(self);
-    [[RPScreenRecorder sharedRecorder] stopRecordingWithHandler:^(RPPreviewViewController * _Nullable previewViewController, NSError * _Nullable error) {
-        if (error) {
-            [MBProgressHUD showError:[NSString stringWithFormat:@"停止错误:%@",[error localizedDescription]]];
-        }else{
-            previewViewController.previewControllerDelegate = weakSelf;
-            
-            [self presentViewController:previewViewController animated:YES completion:NULL];
-            
-        }
-    }];
+    [[ZNFullScreenRecordConsoleWindow shareZNFullScreenRecordConsoleWindow] dismissMenu];
+    
+//    znWeakSelf(self);
+//    [[RPScreenRecorder sharedRecorder] stopRecordingWithHandler:^(RPPreviewViewController * _Nullable previewViewController, NSError * _Nullable error) {
+//        if (error) {
+//            [MBProgressHUD showError:[NSString stringWithFormat:@"停止错误:%@",[error localizedDescription]]];
+//        }else{
+//            previewViewController.previewControllerDelegate = weakSelf;
+//            
+//            [self presentViewController:previewViewController animated:YES completion:NULL];
+//            
+//        }
+//    }];
+    
+    
+    
+    
+    
     
 }
 

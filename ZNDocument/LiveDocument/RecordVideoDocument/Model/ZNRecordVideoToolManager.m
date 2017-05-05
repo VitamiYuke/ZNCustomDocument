@@ -48,7 +48,9 @@
     }
     
     _recordFileURL = nil;//置空以前的
+    _file_path = nil;
     NSString *cachePath = [self recordVideoDetailsPathWithFileType:@"mp4"];
+    _file_path = cachePath;
     [self.movieFileOutPut startRecordingToOutputFileURL:[NSURL fileURLWithPath:cachePath] recordingDelegate:self];
     
     
@@ -156,6 +158,100 @@
     return YES;
 }
 
+//设置焦距
+- (void)configureCameraFocusingWithPoint:(CGPoint)focusPoint{
+    
+    if (CGPointEqualToPoint(focusPoint, CGPointZero)) {
+        return;
+    }
+    
+    CGPoint cameraPoint = [self.previewLayer captureDevicePointOfInterestForPoint:focusPoint];
+    MyLog(@"转化后的Point:%@",NSStringFromCGPoint(cameraPoint));
+    
+    AVCaptureDevice *currentDevice = nil;
+    if (self.isFrontCamera) {
+        currentDevice = self.frontCameraInput.device;
+    }else{
+        currentDevice = self.backCameraInput.device;
+    }
+    MyLog(@"当前设备:%@",currentDevice);
+    if (currentDevice) {
+        
+        NSError *lockError = nil;
+        if ([currentDevice lockForConfiguration:&lockError]) {
+            
+            if ([currentDevice isFocusPointOfInterestSupported]) {
+                [currentDevice setFocusPointOfInterest:cameraPoint];
+            }
+            
+            if ([currentDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+                [currentDevice setFocusMode:AVCaptureFocusModeAutoFocus];
+            }
+            
+            if ([currentDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+                [currentDevice setExposureMode:AVCaptureExposureModeAutoExpose];
+            }
+            
+            if ([currentDevice isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeAutoWhiteBalance]) {
+                [currentDevice setWhiteBalanceMode:AVCaptureWhiteBalanceModeAutoWhiteBalance];
+            } 
+            
+            [currentDevice unlockForConfiguration];
+        }
+        if (lockError) {
+            MyLog(@"聚焦失败:%@",[lockError localizedDescription]);
+        }
+        
+    }
+
+}
+
+//设置焦距
+- (void)configureCameraFocusingLengthWithScale:(CGFloat)scale{
+
+    AVCaptureDevice *currentDevice = nil;
+    if (self.isFrontCamera) {
+        currentDevice = self.frontCameraInput.device;
+    }else{
+        currentDevice = self.backCameraInput.device;
+    }
+    MyLog(@"当前设备:%@",currentDevice);
+    if (currentDevice) {
+        MyLog(@"当前的焦距:%.2f",currentDevice.videoZoomFactor);
+        CGFloat currentZoom = currentDevice.videoZoomFactor;
+        
+        CGFloat finalScale = currentZoom * scale;
+        if (finalScale < 1) {
+            finalScale = 1;
+        }else{
+            if (finalScale > 8.8) {
+                finalScale = 8.8;
+            }
+        }
+        
+        MyLog(@"最终的焦距:%.2f",finalScale);
+        
+        if (finalScale == currentZoom) {
+            MyLog(@"一样就别改变了");
+            return;
+        }
+        
+        
+        NSError *lockError = nil;
+        if ([currentDevice lockForConfiguration:&lockError]) {
+            [currentDevice setVideoZoomFactor:finalScale];
+           [currentDevice unlockForConfiguration];
+        }
+        if (lockError) {
+            MyLog(@"聚焦失败:%@",[lockError localizedDescription]);
+        }
+        
+        
+        
+    }
+    
+}
+
 #pragma mark - 内部参数配置
 - (void)configureRecordVideoParameter{
     
@@ -184,6 +280,9 @@
         _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
         _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         _previewLayer.frame = _previewFrame;
+        
+        _focusingLayer = [ZNBasedToolManager YukeToolGetShaperLayerWithFillColor:[UIColor clearColor] strokeColor:MyColor(239, 106, 106) lineWidth:1 path:[UIBezierPath bezierPath]];
+        [_previewLayer addSublayer:_focusingLayer];
     }
     
     
@@ -196,6 +295,7 @@
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     //遍历这些设备返回跟position相关的设备
     for (AVCaptureDevice *device in devices) {
+        MyLog(@"当前设备信息:%@",device);
         if ([device position] == position) {
             return device;
         }
@@ -317,17 +417,82 @@
     if (!fileURL) {
         return NO;
     }
-    //视频录入完成之后在后台将视频存储到相
+    
+    
+    __block NSString *assetIndentifier = nil;
+    
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:fileURL];
+        PHAssetChangeRequest *result  = [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:fileURL];
+        assetIndentifier = result.placeholderForCreatedAsset.localIdentifier;
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
-        if (error) {
-            MyLog(@"保存视频到相簿过程中发生错误，错误信息：%@",error.localizedDescription);
+        if (success) {
+            if (assetIndentifier) {
+                PHAssetCollection *customCollection = [self getAPPCustomAssetCollectionWithAppNameAndCreateIfNo];
+                if (customCollection) {
+                    PHFetchResult<PHAsset *> *videoAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetIndentifier] options:nil];
+                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                        
+                        PHAssetCollectionChangeRequest *result = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:customCollection];
+                        [result insertAssets:videoAsset atIndexes:[NSIndexSet indexSetWithIndex:0]];
+                        
+                        MyLog(@"改变:%@",result);
+                    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                        if (!error) {
+                            MyLog(@"保存到自定义相册成功");
+                        }
+                    }];
+                    
+                }
+            }
         }
-        MyLog(@"成功保存视频到相簿.");
     }];
+    
     return YES;
 }
+
+
+//获取自定义相册
+
+- (PHAssetCollection *)getAPPCustomAssetCollectionWithAppNameAndCreateIfNo{
+
+    NSString *title = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"]; 
+    //查找所有相册
+    PHFetchResult<PHAssetCollection*> *collections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    
+    for (PHAssetCollection *collection in collections) {
+        if ([collection.localizedTitle isEqualToString:title]) {
+            return collection;
+        }
+    }
+    
+    
+    //创建
+    NSError *error = nil;
+    __block NSString *createIndentifier = nil;
+    [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+        
+        PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:title];
+        createIndentifier = request.placeholderForCreatedAssetCollection.localIdentifier;
+        
+        
+    } error:&error];
+    
+    if (error) {
+        MyLog(@"错误:%@",[error localizedDescription]);
+        return nil;
+    }else{
+        MyLog(@"创建成功");
+        return [[PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[createIndentifier] options:nil] firstObject];
+    }
+    return nil;
+}
+
+
+
+
+
+
+
 
 
 @end

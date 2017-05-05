@@ -388,11 +388,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZNDocument/LiveDocument/Controller/ZNLiveTestController.m"
-            timestampString = "514432777.832811"
+            timestampString = "515661596.223056"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "-endScreenRecord"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,6 +410,22 @@
             startingLineNumber = "202"
             endingLineNumber = "202"
             landmarkName = "-loadingStockFinanceInfoData"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ZNDocument/LiveDocument/Controller/ZNLiveTestController.m"
+            timestampString = "515671661.703625"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "-startScreenRecord"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

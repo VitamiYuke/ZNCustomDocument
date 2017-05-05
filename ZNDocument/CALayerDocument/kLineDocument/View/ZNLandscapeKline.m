@@ -357,17 +357,25 @@
     
 
 
-    if (gesture.state == UIGestureRecognizerStateChanged) {
-        self.KlineLandscapeVolumeWidth = gesture.scale *  self.KlineLandscapeVolumeWidth;
+    if (gesture.state == UIGestureRecognizerStateChanged || gesture.state == UIGestureRecognizerStateBegan) {
         
-        if (self.KlineLandscapeVolumeWidth > self.canvasWidth/20) {
-            self.KlineLandscapeVolumeWidth = self.canvasWidth/20;
+        CGFloat tempVolumeWidth = gesture.scale *  self.KlineLandscapeVolumeWidth;
+        gesture.scale = 1;
+         
+        if (tempVolumeWidth > self.canvasWidth/20) {
+            tempVolumeWidth = self.canvasWidth/20;
         }
         
-        if (self.KlineLandscapeVolumeWidth < candleMinWidth) {
-            self.KlineLandscapeVolumeWidth = candleMinWidth;
+        if (tempVolumeWidth < candleMinWidth) {
+            tempVolumeWidth = candleMinWidth;
         }
         
+        if (tempVolumeWidth == self.KlineLandscapeVolumeWidth) {
+            MyLog(@"一样就别改变了");
+            return;
+        }else{
+            self.KlineLandscapeVolumeWidth = tempVolumeWidth;
+        }
         self.KlineStartIndex = self.tempDrawIndex - self.numberOfKlineCanShow/2;
         
         if (self.KlineStartIndex+self.numberOfKlineCanShow>=self.KlineDataArray.count) {

@@ -309,6 +309,9 @@
 		6DDB4DEB1E67F44B00CAFB17 /* ZNBasedToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDB4DEA1E67F44B00CAFB17 /* ZNBasedToolManager.m */; };
 		6DDB4DEE1E67F6D200CAFB17 /* ZNBasedParameteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDB4DED1E67F6D200CAFB17 /* ZNBasedParameteManager.m */; };
 		6DDB4DF31E68173000CAFB17 /* ZNCustomChooseSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDB4DF21E68173000CAFB17 /* ZNCustomChooseSelectedView.m */; };
+		6DDE86CF1EBABFB5006ED61F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DDE86CA1EBABF74006ED61F /* libGPUImage.a */; };
+		6DDE86D41EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */; };
+		6DDE86D91EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */; };
 		6DED088A1DD41B4000D8C2F2 /* ZNPlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED08891DD41B4000D8C2F2 /* ZNPlayerSlider.m */; };
 		6DED088D1DD457EA00D8C2F2 /* ZNAVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED088C1DD457EA00D8C2F2 /* ZNAVPlayerView.m */; };
 		6DED52051E97933200097D6F /* NSBundle+PYSearchExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED51F81E97933200097D6F /* NSBundle+PYSearchExtension.m */; };
@@ -364,6 +367,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6DDE86C91EBABF74006ED61F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+		6DDE86CB1EBABF74006ED61F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCE209E51943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
+		};
+		6DDE86CD1EBABF9E006ED61F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
 		CD2DDEC21D585E8800DF4EB0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CD2DDEA01D585E8800DF4EB0 /* Project object */;
@@ -928,6 +952,11 @@
 		6DDB4DF01E67FD3700CAFB17 /* InterfaceDomainConfigure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfaceDomainConfigure.h; sourceTree = "<group>"; };
 		6DDB4DF11E68173000CAFB17 /* ZNCustomChooseSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNCustomChooseSelectedView.h; sourceTree = "<group>"; };
 		6DDB4DF21E68173000CAFB17 /* ZNCustomChooseSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNCustomChooseSelectedView.m; sourceTree = "<group>"; };
+		6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = TheImageProcessingFramework/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
+		6DDE86D21EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSmallVideoPlayerLayer.h; sourceTree = "<group>"; };
+		6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSmallVideoPlayerLayer.m; sourceTree = "<group>"; };
+		6DDE86D71EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNFullScreenRecordConsoleWindow.h; sourceTree = "<group>"; };
+		6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNFullScreenRecordConsoleWindow.m; sourceTree = "<group>"; };
 		6DED08881DD41B4000D8C2F2 /* ZNPlayerSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNPlayerSlider.h; sourceTree = "<group>"; };
 		6DED08891DD41B4000D8C2F2 /* ZNPlayerSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNPlayerSlider.m; sourceTree = "<group>"; };
 		6DED088B1DD457EA00D8C2F2 /* ZNAVPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNAVPlayerView.h; sourceTree = "<group>"; };
@@ -1042,6 +1071,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DDE86CF1EBABFB5006ED61F /* libGPUImage.a in Frameworks */,
 				6D13FFBA1EA8CCC4003B4005 /* ReplayKit.framework in Frameworks */,
 				6D205F231E48923200D5CB80 /* WebP.framework in Frameworks */,
 				6DCC76CC1DCC7F2600E3B69D /* AudioToolbox.framework in Frameworks */,
@@ -1154,6 +1184,10 @@
 			children = (
 				6D13FFB31EA73343003B4005 /* ZNRecordVideoControllerView.h */,
 				6D13FFB41EA73343003B4005 /* ZNRecordVideoControllerView.m */,
+				6DDE86D21EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.h */,
+				6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */,
+				6DDE86D71EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.h */,
+				6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2240,6 +2274,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		6DDE86C41EBABF73006ED61F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6DDE86CA1EBABF74006ED61F /* libGPUImage.a */,
+				6DDE86CC1EBABF74006ED61F /* GPUImage.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6DED51F51E97933200097D6F /* SearchDocument */ = {
 			isa = PBXGroup;
 			children = (
@@ -2346,6 +2389,7 @@
 		CD1C73B51D5980C5004AFCCF /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */,
 				CDBD07F61D75510F009FF019 /* JsonKit */,
 				CD1C73B61D5980D2004AFCCF /* MBProgressHUD+MJ.h */,
 				CD1C73B71D5980D2004AFCCF /* MBProgressHUD+MJ.m */,
@@ -2825,6 +2869,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6DDE86CE1EBABF9E006ED61F /* PBXTargetDependency */,
 			);
 			name = ZNDocument;
 			productName = ZNDocument;
@@ -2902,6 +2947,12 @@
 			mainGroup = CD2DDE9F1D585E8800DF4EB0;
 			productRefGroup = CD2DDEA91D585E8800DF4EB0 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6DDE86C41EBABF73006ED61F /* Products */;
+					ProjectRef = 6DDE86C31EBABF73006ED61F /* GPUImage.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				CD2DDEA71D585E8800DF4EB0 /* ZNDocument */,
@@ -2910,6 +2961,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6DDE86CA1EBABF74006ED61F /* libGPUImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGPUImage.a;
+			remoteRef = 6DDE86C91EBABF74006ED61F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6DDE86CC1EBABF74006ED61F /* GPUImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GPUImage.framework;
+			remoteRef = 6DDE86CB1EBABF74006ED61F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CD2DDEA61D585E8800DF4EB0 /* Resources */ = {
@@ -3078,6 +3146,7 @@
 				6D205EBC1E48908D00D5CB80 /* YYTextExampleHelper.m in Sources */,
 				6D205EBA1E48908D00D5CB80 /* YYTextRubyExample.m in Sources */,
 				6DAA0EC41DAB3C6E00836E0B /* ZNTableViewCell.m in Sources */,
+				6DDE86D41EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m in Sources */,
 				6D205E561E488B9500D5CB80 /* YYLabel.m in Sources */,
 				6DED520B1E97933200097D6F /* UIView+PYSearchExtension.m in Sources */,
 				6D5F732B1DD08FC800AB0E92 /* ZNLiveItem.m in Sources */,
@@ -3249,6 +3318,7 @@
 				6DED52091E97933200097D6F /* PYSearchViewController.m in Sources */,
 				6DED52081E97933200097D6F /* PYSearchSuggestionViewController.m in Sources */,
 				6D205E4F1E488B9500D5CB80 /* UIPasteboard+YYText.m in Sources */,
+				6DDE86D91EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m in Sources */,
 				CD2DDEEC1D58812F00DF4EB0 /* ZNNavigationController.m in Sources */,
 				6D205EB81E48908D00D5CB80 /* YYTextCopyPasteExample.m in Sources */,
 				6DDB4DDC1E67F22200CAFB17 /* ZNStockDetailsModel.m in Sources */,
@@ -3347,6 +3417,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6DDE86CE1EBABF9E006ED61F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImage;
+			targetProxy = 6DDE86CD1EBABF9E006ED61F /* PBXContainerItemProxy */;
+		};
 		CD2DDEC31D585E8800DF4EB0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CD2DDEA71D585E8800DF4EB0 /* ZNDocument */;
@@ -3468,6 +3543,32 @@
 					"$(PROJECT_DIR)/ZNDocument/GoodDemoCollection/TableViewPerformanceOptimization/Vendor",
 				);
 				GCC_PREFIX_HEADER = ZNDocument/LibDocument/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/ASIHTTPRequest\"",
+					"\"${PODS_ROOT}/Headers/Public/Bugly\"",
+					"\"${PODS_ROOT}/Headers/Public/FDFullscreenPopGesture\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/LCActionSheet\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/PPSSignatureView\"",
+					"\"${PODS_ROOT}/Headers/Public/Pingpp\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/SAMKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SVProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/TYAttributedLabel\"",
+					"\"${PODS_ROOT}/Headers/Public/UIView+AutoLayout\"",
+					"\"${PODS_ROOT}/Headers/Public/ZFDownload\"",
+					"\"${PODS_ROOT}/Headers/Public/pop\"",
+					"ZNDocument/LibDocument/Lib/TheImageProcessingFramework/framework/Source/**",
+				);
 				INFOPLIST_FILE = ZNDocument/SystemDocument/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -3491,6 +3592,32 @@
 					"$(PROJECT_DIR)/ZNDocument/GoodDemoCollection/TableViewPerformanceOptimization/Vendor",
 				);
 				GCC_PREFIX_HEADER = ZNDocument/LibDocument/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/ASIHTTPRequest\"",
+					"\"${PODS_ROOT}/Headers/Public/Bugly\"",
+					"\"${PODS_ROOT}/Headers/Public/FDFullscreenPopGesture\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/LCActionSheet\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/PPSSignatureView\"",
+					"\"${PODS_ROOT}/Headers/Public/Pingpp\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/SAMKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SVProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/TYAttributedLabel\"",
+					"\"${PODS_ROOT}/Headers/Public/UIView+AutoLayout\"",
+					"\"${PODS_ROOT}/Headers/Public/ZFDownload\"",
+					"\"${PODS_ROOT}/Headers/Public/pop\"",
+					"ZNDocument/LibDocument/Lib/TheImageProcessingFramework/framework/Source/**",
+				);
 				INFOPLIST_FILE = ZNDocument/SystemDocument/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

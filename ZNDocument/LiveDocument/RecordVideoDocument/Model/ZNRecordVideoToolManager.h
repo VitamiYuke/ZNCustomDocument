@@ -15,7 +15,11 @@
 
 @property(nonatomic, strong, readonly)AVCaptureVideoPreviewLayer *previewLayer;//界面显示
 
+@property(nonatomic, strong, readonly)CAShapeLayer *focusingLayer;
+
 @property(nonatomic, strong, readonly)NSURL *recordFileURL;//录制完毕的视频链接 有值则录制完毕
+
+@property(nonatomic, copy, readonly)NSString *file_path;
 
 
 
@@ -30,9 +34,11 @@
 - (void)startRecordVideo;
 - (void)endRecordVideo;
 
+//聚焦
+- (void)configureCameraFocusingWithPoint:(CGPoint )focusPoint;
 
-
-
+//焦距
+- (void)configureCameraFocusingLengthWithScale:(CGFloat )scale;
 
 
 @end
@@ -53,6 +59,13 @@
 
 //根据URL存储到相册
 - (BOOL )saveRecordVideoWithFileURL:(NSURL *)fileURL;
+
+
+
+
+
+
+
 
 
 
