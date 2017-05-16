@@ -8,6 +8,12 @@
 
 #import "ZNViewController.h"
 
+@class ZNOutputVideoModel;
+
 @interface ZNRecordVideoController : ZNViewController
+
+@property(nonatomic, copy)void(^processedVideo)(ZNOutputVideoModel *);
+
+
 
 @end

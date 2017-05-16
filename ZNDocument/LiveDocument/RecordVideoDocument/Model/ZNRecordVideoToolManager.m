@@ -8,6 +8,7 @@
 
 #import "ZNRecordVideoToolManager.h"
 #import <Photos/Photos.h>
+#import "UIImage+ScaleToSize.h"
 @interface ZNRecordVideoToolManager ()<AVCaptureFileOutputRecordingDelegate>
 
 @property(nonatomic, strong)AVCaptureSession *captureSession;//输入输出的连接
@@ -51,6 +52,8 @@
     _file_path = nil;
     NSString *cachePath = [self recordVideoDetailsPathWithFileType:@"mp4"];
     _file_path = cachePath;
+
+    
     [self.movieFileOutPut startRecordingToOutputFileURL:[NSURL fileURLWithPath:cachePath] recordingDelegate:self];
     
     
@@ -146,13 +149,25 @@
         if ([self.captureSession canAddInput:self.frontCameraInput]) {
             [self.captureSession addInput:self.frontCameraInput];
         }
+        
+        
+        self.videoConnection = nil;
+        if (self.videoConnection.supportsVideoMirroring) {
+            MyLog(@"支持修改镜像");
+            self.videoConnection.videoMirrored = YES;
+        }
+        
     }else{
         [self.captureSession removeInput:self.frontCameraInput];
         if ([self.captureSession canAddInput:self.backCameraInput]) {
             [self.captureSession addInput:self.backCameraInput];
         }
+        
     }
     [self.captureSession commitConfiguration];
+    
+    
+    
     [self startRecordFunction];
     
     return YES;
@@ -272,9 +287,9 @@
         [self.captureSession addOutput:self.movieFileOutPut];
     }
     
+    
     //设置录制的方向
     self.videoConnection.videoOrientation = AVCaptureVideoOrientationPortrait;
-    
     //显示层
     if (!_previewLayer) {
         _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
@@ -333,6 +348,9 @@
         if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
             [_captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
         }
+        
+        
+        
     }
     return _captureSession;
 }
@@ -392,6 +410,22 @@
 @end
 
 
+
+//视频的模型
+@implementation ZNPhoneVideoListModel
+
+
+
+@end
+
+
+@implementation ZNOutputVideoModel
+
+
+
+@end
+
+
 @implementation ZNRecordVideoToolManager (ZNAuthorization)
 
 - (BOOL)isAvailableWithCamera
@@ -412,7 +446,7 @@
         return YES;
 }
 
-- (BOOL)saveRecordVideoWithFileURL:(NSURL *)fileURL{
+- (BOOL)saveRecordVideoWithFileURL:(NSURL *)fileURL andToDealWithTheVideoFinish:(void (^)(ZNOutputVideoModel *))finishSucc{
     
     if (!fileURL) {
         return NO;
@@ -430,6 +464,10 @@
                 PHAssetCollection *customCollection = [self getAPPCustomAssetCollectionWithAppNameAndCreateIfNo];
                 if (customCollection) {
                     PHFetchResult<PHAsset *> *videoAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetIndentifier] options:nil];
+                    PHAsset *operationAsset = [videoAsset firstObject];
+                    
+                    [self configurePhoneVideoWithPHAsset:operationAsset complete:finishSucc];
+                    
                     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                         
                         PHAssetCollectionChangeRequest *result = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:customCollection];
@@ -439,6 +477,7 @@
                     } completionHandler:^(BOOL success, NSError * _Nullable error) {
                         if (!error) {
                             MyLog(@"保存到自定义相册成功");
+
                         }
                     }];
                     
@@ -488,9 +527,289 @@
 }
 
 
+//获取所有视频专辑列表
+
+- (NSArray<ZNPhoneVideoListModel *> *)getAllPhoneVideoAblumList{
+    
+    NSMutableArray<ZNPhoneVideoListModel *> *tempArray= @[].mutableCopy;
+    
+    
+    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumVideos options:nil];
+    
+    [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if( collection.assetCollectionSubtype < 212){
+            NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
+            if (assets.count > 0) {
+                ZNPhoneVideoListModel *ablum = [[ZNPhoneVideoListModel alloc] init];
+                ablum.title = collection.localizedTitle;
+                ablum.count = assets.count;
+                ablum.headImageAsset = assets.firstObject;
+                ablum.assetCollection = collection;
+                [tempArray addObject:ablum];
+            }
+        }
+    }];
+    
+    
+    
+    //获取用户创建的相册
+    PHFetchResult *userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumVideos options:nil];
+    [userAlbums enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
+        if (assets.count > 0) {
+            ZNPhoneVideoListModel *ablum = [[ZNPhoneVideoListModel alloc] init];
+            ablum.title = collection.localizedTitle;
+            ablum.count = assets.count;
+            ablum.headImageAsset = assets.firstObject;
+            ablum.assetCollection = collection;
+            [tempArray addObject:ablum];
+        }
+    }];
+    return tempArray;
+}
 
 
 
+
+//获取制定相册所有的视频
+- (NSArray<PHAsset *> *)getAssetsInAssetCollection:(PHAssetCollection *)assetCollection ascending:(BOOL)ascending
+{
+    NSMutableArray<PHAsset *> *arr = [NSMutableArray array];
+    
+    PHFetchResult *result = [self fetchAssetsInAssetCollection:assetCollection ascending:ascending];
+    [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (((PHAsset *)obj).mediaType == PHAssetMediaTypeVideo) {
+            [arr addObject:obj];
+        }
+    }];
+    return arr;
+}
+
+
+
+- (PHFetchResult *)fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection ascending:(BOOL)ascending
+{
+    PHFetchOptions *option = [[PHFetchOptions alloc] init];
+    option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascending]];
+    PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:option];
+    return result;
+}
+
+- (NSArray<PHAsset *> *)getAllPhoneVideoAsset
+{
+    NSMutableArray<PHAsset *> *assets = [NSMutableArray array];
+    
+    PHFetchOptions *option = [[PHFetchOptions alloc] init];
+    //ascending 为YES时，按照照片的创建时间升序排列;为NO时，则降序排列
+    option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    
+    PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeVideo options:option];
+    
+    [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PHAsset *asset = (PHAsset *)obj;
+        [assets addObject:asset];
+    }];
+    
+    return assets;
+}
+
+- (ZNOutputVideoModel *)getOutputVideoAssetWithSourceURL:(NSURL *)sourceURL complete:(void (^)(void))finishSucc{
+    
+    if (!sourceURL) {
+        return nil;
+    }
+    
+    ZNOutputVideoModel *model = [[ZNOutputVideoModel alloc] init];
+    model.outputPath = [self detailsVideoPathDesc];
+    AVAsset *asset = [AVAsset assetWithURL:sourceURL];
+    model.cover = [self getCoverWithAVAsset:asset];
+    AVAssetExportSession *exportSession = [AVAssetExportSession exportSessionWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
+    exportSession.shouldOptimizeForNetworkUse = YES;
+    exportSession.outputURL = [NSURL fileURLWithPath:model.outputPath];
+    exportSession.outputFileType = AVFileTypeMPEG4;
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        int exportStatus = exportSession.status;;
+        switch (exportStatus) {
+            case AVAssetExportSessionStatusFailed:
+                MyLog(@"转码失败");
+                break;
+            case AVAssetExportSessionStatusCompleted:
+                MyLog(@"转码完成");
+                finishSucc();
+                break;
+            default:
+                break;
+        }
+    }];
+    return model;
+}
+
+
+//压缩存储的地址
+- (NSString *)defaultVideosPath{
+    NSString *videoCompression = [ZNDocumentPathName stringByAppendingPathComponent:@"YukeMovies"];
+    BOOL isDir = NO;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:videoCompression isDirectory:&isDir];
+    if ( !(isDir == YES && existed == YES) ) {
+        [fileManager createDirectoryAtPath:videoCompression withIntermediateDirectories:YES attributes:nil error:nil];
+    };
+    return videoCompression;
+}
+
+
+//详细输出地址
+- (NSString *)detailsVideoPathDesc{
+    NSString *defaultPath = [self defaultVideosPath];
+    NSString *dateString = [self.dateFormatter stringFromDate:[NSDate date]];
+    NSString *detailsPath = [defaultPath stringByAppendingPathComponent:[NSString stringWithFormat:@"YukeMovie_%@.mp4",dateString]];
+    MyLog(@"存储视频的详细地址:%@",detailsPath);
+    return detailsPath;
+}
+
+
+//获取封面图
+- (UIImage *)getCoverWithAVAsset:(AVAsset *)asset{
+    
+    if (!asset) {
+        return nil;
+    }
+    AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    imageGenerator.appliesPreferredTrackTransform = YES;
+    
+    NSError *error = nil;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    CMTime actualTime;
+    CGImageRef image = [imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    if (image) {
+        UIImage *originImage = [UIImage imageWithCGImage:image];
+        
+//        NSData *imageData = UIImageJPEGRepresentation(originImage, 0.5);
+//        
+//        originImage = [UIImage imageWithData:imageData];
+        
+        return originImage;
+    }
+    return nil;
+}
+
+//获取视频时间
+- (int )getVideoTimeWithAVAsset:(AVAsset *)asset{
+    if (!asset) {
+        return 0;
+    }
+    CMTime time = asset.duration;
+    
+    CGFloat accurateTime = (float )time.value/time.timescale;
+    
+    return (int )ceilf(accurateTime);
+    
+}
+
+
+
+//对本地的视频进行处理
+
+- (void )configurePhoneVideoWithPHAsset:(PHAsset *)asset complete:(void(^)(ZNOutputVideoModel *dealedModel))finishSucc{
+    if (!asset) {
+        return ;
+    }
+    
+    
+    ZNOutputVideoModel *model = [[ZNOutputVideoModel alloc] init];
+    model.outputPath = [self detailsVideoPathDesc];
+    MyLog(@"压缩处理的文件地址:%@",model.outputPath);
+    
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+    
+//    options.progressHandler(double progress, <#NSError * _Nullable error#>, <#BOOL * _Nonnull stop#>, <#NSDictionary * _Nullable info#>)
+    
+    [[PHCachingImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        
+        //缩略图
+        model.cover = [self getCoverWithAVAsset:asset];
+        model.video_time = [self getVideoTimeWithAVAsset:asset];
+        AVAssetExportSession *exportSession = [AVAssetExportSession exportSessionWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+        exportSession.shouldOptimizeForNetworkUse = YES;
+        exportSession.outputURL = [NSURL fileURLWithPath:model.outputPath];
+        exportSession.outputFileType = AVFileTypeMPEG4;
+        [exportSession exportAsynchronouslyWithCompletionHandler:^{
+            int exportStatus = exportSession.status;;
+            switch (exportStatus) {
+                case AVAssetExportSessionStatusFailed:
+                    MyLog(@"转码失败");
+                    break;
+                case AVAssetExportSessionStatusCompleted:
+                    MyLog(@"转码完成");
+                    finishSucc(model);
+                    break;
+                default:
+                    break;
+            }
+        }];
+    
+    }];
+}
+
+
+
++ (void)clearAllTempProcessedVideos{
+    
+    NSArray *videosNames = [self getAllTempProcessedVideosLocalNames];
+    if (videosNames.count) {
+        [videosNames enumerateObjectsUsingBlock:^(NSString *videosName, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *absolutePath = [self getAbsolutePathWithLocalName:videosName];
+            if (absolutePath) {
+                NSError *removeError = nil;
+                [[NSFileManager defaultManager] removeItemAtPath:absolutePath error:&removeError];
+                if (removeError) {
+                    MyLog(@"错误:%@",removeError);
+                }
+            }
+        }];
+        
+    } 
+    
+}
+
+
++ (NSArray<NSString *> *)getAllTempProcessedVideosLocalNames{
+    
+    NSMutableArray <NSString *> *tempArray = @[].mutableCopy;
+    
+    NSString *videoCompression = [ZNDocumentPathName stringByAppendingPathComponent:@"YukeMovies"];
+    BOOL isDir = NO;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:videoCompression isDirectory:&isDir];
+    if (isDir && existed) {
+        NSError *error = nil;
+        NSArray *contents = [fileManager contentsOfDirectoryAtPath:videoCompression error:&error];
+        if (error) {
+            MyLog(@"错误%@",error);
+        }else{
+            [tempArray addObjectsFromArray:contents];
+        }
+    }
+
+    return tempArray;
+}
+
++ (NSString *)getAbsolutePathWithLocalName:(NSString *)localVideosName
+{
+    
+    if (!localVideosName) {
+        return nil;
+    }
+    
+    NSString *videoCompression = [ZNDocumentPathName stringByAppendingPathComponent:@"YukeMovies"];
+    NSString *absolutePath = [videoCompression stringByAppendingPathComponent:localVideosName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:absolutePath]) {
+        return absolutePath;
+    }
+    return nil;
+}
 
 
 

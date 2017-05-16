@@ -312,6 +312,10 @@
 		6DDE86CF1EBABFB5006ED61F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DDE86CA1EBABF74006ED61F /* libGPUImage.a */; };
 		6DDE86D41EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */; };
 		6DDE86D91EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */; };
+		6DE777871EC08A4300008005 /* ZNSmallVideoPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE777861EC08A4300008005 /* ZNSmallVideoPlayView.m */; };
+		6DE7778D1EC1743600008005 /* ZNRecordVideoEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE7778C1EC1743600008005 /* ZNRecordVideoEditController.m */; };
+		6DE777921EC174E800008005 /* ZNVideoEditNavView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE777911EC174E800008005 /* ZNVideoEditNavView.m */; };
+		6DE777AA1EC19EC200008005 /* ZLNormalPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DE777A91EC19EC200008005 /* ZLNormalPhotoActionSheet.xib */; };
 		6DED088A1DD41B4000D8C2F2 /* ZNPlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED08891DD41B4000D8C2F2 /* ZNPlayerSlider.m */; };
 		6DED088D1DD457EA00D8C2F2 /* ZNAVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED088C1DD457EA00D8C2F2 /* ZNAVPlayerView.m */; };
 		6DED52051E97933200097D6F /* NSBundle+PYSearchExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED51F81E97933200097D6F /* NSBundle+PYSearchExtension.m */; };
@@ -957,6 +961,13 @@
 		6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSmallVideoPlayerLayer.m; sourceTree = "<group>"; };
 		6DDE86D71EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNFullScreenRecordConsoleWindow.h; sourceTree = "<group>"; };
 		6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNFullScreenRecordConsoleWindow.m; sourceTree = "<group>"; };
+		6DE777851EC08A4300008005 /* ZNSmallVideoPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSmallVideoPlayView.h; sourceTree = "<group>"; };
+		6DE777861EC08A4300008005 /* ZNSmallVideoPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSmallVideoPlayView.m; sourceTree = "<group>"; };
+		6DE7778B1EC1743600008005 /* ZNRecordVideoEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoEditController.h; sourceTree = "<group>"; };
+		6DE7778C1EC1743600008005 /* ZNRecordVideoEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNRecordVideoEditController.m; sourceTree = "<group>"; };
+		6DE777901EC174E800008005 /* ZNVideoEditNavView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNVideoEditNavView.h; sourceTree = "<group>"; };
+		6DE777911EC174E800008005 /* ZNVideoEditNavView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNVideoEditNavView.m; sourceTree = "<group>"; };
+		6DE777A91EC19EC200008005 /* ZLNormalPhotoActionSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLNormalPhotoActionSheet.xib; sourceTree = "<group>"; };
 		6DED08881DD41B4000D8C2F2 /* ZNPlayerSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNPlayerSlider.h; sourceTree = "<group>"; };
 		6DED08891DD41B4000D8C2F2 /* ZNPlayerSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNPlayerSlider.m; sourceTree = "<group>"; };
 		6DED088B1DD457EA00D8C2F2 /* ZNAVPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNAVPlayerView.h; sourceTree = "<group>"; };
@@ -1166,6 +1177,8 @@
 			children = (
 				6D13FFB01EA7332C003B4005 /* ZNRecordVideoController.h */,
 				6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */,
+				6DE7778B1EC1743600008005 /* ZNRecordVideoEditController.h */,
+				6DE7778C1EC1743600008005 /* ZNRecordVideoEditController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1188,6 +1201,10 @@
 				6DDE86D31EBAD14B006ED61F /* ZNSmallVideoPlayerLayer.m */,
 				6DDE86D71EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.h */,
 				6DDE86D81EBB0290006ED61F /* ZNFullScreenRecordConsoleWindow.m */,
+				6DE777851EC08A4300008005 /* ZNSmallVideoPlayView.h */,
+				6DE777861EC08A4300008005 /* ZNSmallVideoPlayView.m */,
+				6DE777901EC174E800008005 /* ZNVideoEditNavView.h */,
+				6DE777911EC174E800008005 /* ZNVideoEditNavView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2017,6 +2034,7 @@
 				6D81BB611E135B8C002C2267 /* defaultphoto.png */,
 				6D81BB621E135B8C002C2267 /* lock.png */,
 				6D81BB631E135B8C002C2267 /* navBackBtn@2x.png */,
+				6DE777A91EC19EC200008005 /* ZLNormalPhotoActionSheet.xib */,
 				6D81BB641E135B8C002C2267 /* ZLCollectionCell.xib */,
 				6D81BB651E135B8C002C2267 /* ZLNoAuthorityViewController.xib */,
 				6D81BB661E135B8C002C2267 /* ZLPhotoActionSheet.xib */,
@@ -3009,6 +3027,7 @@
 				6D205D4F1E48434800D5CB80 /* ImagesPicker.xcassets in Resources */,
 				6D81BB861E135B8C002C2267 /* btn_original_circle.png in Resources */,
 				6D08FF8A1E496DA9008A6DA8 /* dribbble64_imageio.png in Resources */,
+				6DE777AA1EC19EC200008005 /* ZLNormalPhotoActionSheet.xib in Resources */,
 				6D08FF8C1E496DA9008A6DA8 /* dribbble256_imageio.png in Resources */,
 				6D5F73311DD090B200AB0E92 /* ZNLiveCell.xib in Resources */,
 				6D81BB911E135B8C002C2267 /* navBackBtn@2x.png in Resources */,
@@ -3305,6 +3324,7 @@
 				6D205E281E488B9500D5CB80 /* UIDevice+YYAdd.m in Sources */,
 				CDBEA89B1D6189A3007253E1 /* ZNBesselView.m in Sources */,
 				6D205E261E488B9500D5CB80 /* UIColor+YYAdd.m in Sources */,
+				6DE7778D1EC1743600008005 /* ZNRecordVideoEditController.m in Sources */,
 				6D5F73301DD090B200AB0E92 /* ZNLiveCell.m in Sources */,
 				6DA88F381E89FA210040C6B0 /* ZNKlineLandscapeController.m in Sources */,
 				6DA775BA1DD98E30006CCBD9 /* UINavigationController+ZFPlayerRotation.m in Sources */,
@@ -3331,6 +3351,7 @@
 				6D205E431E488B9500D5CB80 /* YYClassInfo.m in Sources */,
 				6D205EEA1E48914000D5CB80 /* T1StatusCell.m in Sources */,
 				6D205E3D1E488B9500D5CB80 /* YYImageCache.m in Sources */,
+				6DE777871EC08A4300008005 /* ZNSmallVideoPlayView.m in Sources */,
 				6D205E501E488B9500D5CB80 /* YYTextArchiver.m in Sources */,
 				6D205EB91E48908D00D5CB80 /* YYTextUndoRedoExample.m in Sources */,
 				6DDB4DE81E67F3BF00CAFB17 /* ZNStockBasedConfigureLib.m in Sources */,
@@ -3352,6 +3373,7 @@
 				6D0319BC1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.m in Sources */,
 				6DF5BE0A1DD1DC6400FCEFBB /* ZNLiveCollectionController.m in Sources */,
 				6D205E4C1E488B9500D5CB80 /* YYTextSelectionView.m in Sources */,
+				6DE777921EC174E800008005 /* ZNVideoEditNavView.m in Sources */,
 				6D205F081E48916D00D5CB80 /* WBStatusComposeViewController.m in Sources */,
 				6DED088A1DD41B4000D8C2F2 /* ZNPlayerSlider.m in Sources */,
 				6D81BB991E135B8C002C2267 /* ZLBigImageCell.m in Sources */,

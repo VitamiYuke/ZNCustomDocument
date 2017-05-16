@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZNOutputVideoModel;
+
 @interface ZNRecordVideoControllerView : UIView
+
+
+
+@property(nonatomic, copy)void(^processedVideo)(ZNOutputVideoModel *);
 
 
 

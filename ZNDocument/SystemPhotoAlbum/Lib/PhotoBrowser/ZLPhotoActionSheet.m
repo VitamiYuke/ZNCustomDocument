@@ -17,7 +17,7 @@
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
 #import <objc/runtime.h>
-
+#import "ZNRecordVideoController.h"
 double const ScalePhotoWidth = 1000;
 
 typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels);
@@ -29,6 +29,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIButton *btnSmallVideo;
 
 @property (nonatomic, assign) BOOL animate;
 @property (nonatomic, assign) BOOL preview;
@@ -39,6 +40,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
 @property (nonatomic, assign) BOOL senderTabBarIsShow;
 
+@property(nonatomic, assign)BOOL isHaveVideo;
+
 @end
 
 @implementation ZLPhotoActionSheet
@@ -46,12 +49,15 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 - (void)dealloc
 {
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    MyLog(@"相册选集销毁");
 }
 
-- (instancetype)init
+- (instancetype)initWithIsHaveSmallVideo:(BOOL)isHaveVideo
 {
-    self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
+    self = [[kZLPhotoBrowserBundle loadNibNamed:isHaveVideo?@"ZLPhotoActionSheet":@"ZLNormalPhotoActionSheet" owner:self options:nil] lastObject];
+    
     if (self) {
+        self.isHaveVideo = isHaveVideo;
         self.frame = CGRectMake(0, 0, kViewWidth, kViewHeight);
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -74,6 +80,35 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     }
     return self;
 }
+
+
+
+//- (instancetype)init
+//{
+//    self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
+//    if (self) {
+//        self.frame = CGRectMake(0, 0, kViewWidth, kViewHeight);
+//        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+//        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//        layout.minimumInteritemSpacing = 3;
+//        layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
+//        
+//        self.collectionView.collectionViewLayout = layout;
+//        self.collectionView.backgroundColor = [UIColor whiteColor];
+//        [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
+//        
+//        self.maxSelectCount = 10;
+//        self.maxPreviewCount = 20;
+//        self.arrayDataSources  = [NSMutableArray array];
+//        self.arraySelectPhotos = [NSMutableArray array];
+//        
+//        if (![self judgeIsHavePhotoAblumAuthority]) {
+//            //注册实施监听相册变化
+//            [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+//        }
+//    }
+//    return self;
+//}
 
 - (void)layoutSubviews
 {
@@ -216,8 +251,12 @@ static char RelatedKey;
     }
     
     if (self.animate) {
-        CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
-        CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
+        
+        
+        CGFloat finalHeigh = self.isHaveVideo?346:300;
+        
+        CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+finalHeigh/2);
+        CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-finalHeigh/2);
         CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
         [self.baseView.layer addAnimation:animation forKey:nil];
     }
@@ -227,7 +266,8 @@ static char RelatedKey;
 {
     if (self.animate) {
         CGPoint fromPoint = self.baseView.layer.position;
-        CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+kBaseViewHeight);
+         CGFloat finalHeigh = self.isHaveVideo?346:300;
+        CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+finalHeigh);
         CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.1, @"position");
         animation.delegate = self;
         
@@ -314,6 +354,19 @@ static char RelatedKey;
     [self.arraySelectPhotos removeAllObjects];
     [self hide];
 }
+
+- (IBAction)btnVideo_Click:(UIButton *)sender {
+    
+    [self.arraySelectPhotos removeAllObjects];
+    [self hide];
+    [self performSelector:@selector(goToSmallVideoAction) withObject:nil afterDelay:0.3];
+    
+}
+
+- (void)goToSmallVideoAction{
+    [self.sender presentViewController:[[ZNRecordVideoController alloc] init] animated:YES completion:NULL];
+}
+
 
 - (void)cell_btn_Click:(UIButton *)btn
 {

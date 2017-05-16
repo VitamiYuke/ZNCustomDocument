@@ -30,6 +30,7 @@
 {
     [super viewWillAppear:animated];
     MyLog(@"%s:将要显示",object_getClassName(self));
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
 }
 

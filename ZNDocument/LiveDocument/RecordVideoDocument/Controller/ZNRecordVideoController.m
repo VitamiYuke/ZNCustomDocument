@@ -30,6 +30,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view addSubview:self.controllerView];
+    if (self.processedVideo) {
+        self.controllerView.processedVideo = self.processedVideo;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

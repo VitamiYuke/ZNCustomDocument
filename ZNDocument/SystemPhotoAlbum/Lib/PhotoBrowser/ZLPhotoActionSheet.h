@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZLPhotoActionSheet : UIView
 
+
+- (instancetype)initWithIsHaveSmallVideo:(BOOL )isHaveVideo;
+
+
+
+
 @property (nonatomic, weak) UIViewController *sender;
 
 /** 最大选择数 default is 10 */

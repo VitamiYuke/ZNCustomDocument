@@ -10,6 +10,7 @@
 #import "ZLPhotoActionSheet.h"
 #import "ZLDefine.h"
 #import "JKImagePickerController.h"
+#import "ZNRecordVideoController.h"
 @interface ZNSysPhotoAlbumTestController ()<JKImagePickerControllerDelegate>
 
 @property (nonatomic, strong) NSArray<ZLSelectPhotoModel *> *lastSelectMoldels;
@@ -50,7 +51,7 @@
 
 - (void)lookLocalPhotoAlbum
 {
-    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] initWithIsHaveSmallVideo:YES];
     //设置照片最大选择数
     actionSheet.maxSelectCount = 3;
     //设置照片最大预览数
@@ -70,7 +71,7 @@
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
     //设置照片最大选择数
     actionSheet.maxSelectCount = 3;
-    weakify(self);
+    weakify(self);    
     [actionSheet showPhotoLibraryWithSender:self lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
         strongify(weakSelf);
         strongSelf.lastSelectMoldels = selectPhotoModels; //用来标记已选的图片

@@ -70,6 +70,10 @@
 - (CGFloat )configurePriceDifference;
 //K线X轴刻度宽度
 - (CGSize )configureKlineXAxisDescSize;
+//K线距离K线画板上下间距
+- (CGFloat )configureKlineYAxisPadding;
+
+
 ////K线的刻度
 //- (void)configureKlineXAxisWithPointArray:(NSArray *)pointArray descArray:(NSArray *)descArray superLayer:(CALayer *)superLayer;
 #pragma mark -- 竖屏和横屏公用

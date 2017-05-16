@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+@class PHAsset;
+@class PHAssetCollection;
+
 @interface ZNRecordVideoToolManager : NSObject
 
 - (instancetype)initWithPreviewLayerFrame:(CGRect )frame;
@@ -44,6 +47,31 @@
 @end
 
 
+//视频专辑的模型
+@interface ZNPhoneVideoListModel : NSObject
+
+@property (nonatomic, copy) NSString *title; //相册名字
+@property (nonatomic, assign) NSInteger count; //该相册内相片数量
+@property (nonatomic, strong) PHAsset *headImageAsset; //相册第一张图片缩略图
+@property (nonatomic, strong) PHAssetCollection *assetCollection; //相册集，通过该属性获取该相册集下所有照片
+
+@end
+
+
+
+@interface ZNOutputVideoModel : NSObject
+
+
+@property(nonatomic, strong)UIImage *cover;
+@property(nonatomic, strong)NSData *video_data;
+@property(nonatomic, assign)int video_time;
+@property(nonatomic, copy)NSString *outputPath;
+
+
+@end
+
+
+
 
 @interface ZNRecordVideoToolManager (ZNAuthorization)
 
@@ -57,12 +85,22 @@
  */
 - (BOOL)isAvailableWithMic;
 
-//根据URL存储到相册
-- (BOOL )saveRecordVideoWithFileURL:(NSURL *)fileURL;
+//根据URL存储到相册 并获取压缩后的文件
+- (BOOL )saveRecordVideoWithFileURL:(NSURL *)fileURL andToDealWithTheVideoFinish:(void(^)(ZNOutputVideoModel *dealedModel))finishSucc;
+
+//获取所有视频的列表
+- (NSArray<ZNPhoneVideoListModel *>*)getAllPhoneVideoAblumList;
 
 
+//获取相册内所有的视频资源
+- (NSArray<PHAsset *>*)getAllPhoneVideoAsset;
 
+//清除所有压缩过的视频缓存
++ (void)clearAllTempProcessedVideos;
 
++ (NSArray<NSString *>*)getAllTempProcessedVideosLocalNames;
+
++ (NSString *)getAbsolutePathWithLocalName:(NSString *)localVideosName;
 
 
 

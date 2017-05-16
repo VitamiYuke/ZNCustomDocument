@@ -491,7 +491,8 @@
 - (CGFloat)configurePriceUnitHeight{
 
     if (self.configurePriceDifference > 0) {
-        return (self.canvasKlineHeight - 2)/ self.configurePriceDifference ;
+        
+        return (self.canvasKlineHeight - self.configureKlineYAxisPadding*2)/ self.configurePriceDifference ;
     }
     
     return 0;
@@ -512,6 +513,17 @@
 - (CGSize)configureKlineXAxisDescSize{
     return [ZNStockBasedConfigureLib YukeToolGetFitSizeWithContentFont:self.kTimeTheXAxisAtt[NSFontAttributeName] content:@"1993-05" limitSize:CGSizeMake(MAXFLOAT, MAXFLOAT)];
 }
+
+
+- (CGFloat)configureKlineYAxisPadding{
+    
+    if (!self.isLandscape && self.chartType == ZNChartDailyKLine) {
+        return 12;
+    }
+
+    return 1;
+}
+
 
 
 - (void)configureKlineXAxisWithPointArray:(NSArray *)pointArray descArray:(NSArray *)descArray superLayer:(CALayer *)superLayer
@@ -1018,18 +1030,18 @@
         CGFloat avgPriceY = self.canvasTop + self.canvasKlineHeight/2;
         
         if (self.configurePriceDifference > 0) {
-            priceY = (self.maxPrice - [model.price floatValue])*everyDollarHeight + self.canvasTop + 1;
-            avgPriceY = (self.maxPrice - [model.avg_price floatValue])*everyDollarHeight + self.canvasTop + 1;
+            priceY = (self.maxPrice - [model.price floatValue])*everyDollarHeight + self.canvasTop + self.configureKlineYAxisPadding;
+            avgPriceY = (self.maxPrice - [model.avg_price floatValue])*everyDollarHeight + self.canvasTop + self.configureKlineYAxisPadding;
             
         }else {//涨停或者跌停
             if (self.maxPrice > self.YesterdayClosingPrice) {//涨停
-                priceY = self.canvasTop + 1;
-                avgPriceY = self.canvasTop + 1;
+                priceY = self.canvasTop + self.configureKlineYAxisPadding;
+                avgPriceY = self.canvasTop + self.configureKlineYAxisPadding;
             }
             
             if (self.maxPrice < self.YesterdayClosingPrice) {//跌停
-                priceY = self.canvasKlineBottom - 1;
-                avgPriceY = self.canvasKlineBottom - 1;
+                priceY = self.canvasKlineBottom - self.configureKlineYAxisPadding;
+                avgPriceY = self.canvasKlineBottom - self.configureKlineYAxisPadding;
             }
             
         }
@@ -1171,17 +1183,20 @@
     NSMutableArray *xAxisStartXArray = @[].mutableCopy;
     NSMutableArray *xAxisDesc = @[].mutableCopy;
     CGFloat xAxisDescMinWidth = self.configureKlineXAxisDescSize.width;
+    
+    
+    
     for (NSInteger i = self.KlineStartIndex; i < _KlineMaxCount; i++) {
         ZNStockKlineModel *lineModel = self.KlineDataArray[i];
         CGFloat startDrawPointX = unitVolumeWidth*(i - self.KlineStartIndex) + unitVolumeWidth/2 + self.canvasLeft;
-        CGFloat openY = ((self.maxPrice - [lineModel.open floatValue]) * everyDollarHeight) + self.canvasTop+1;
-        CGFloat closeY = ((self.maxPrice - [lineModel.close floatValue]) * everyDollarHeight) + self.canvasTop+1;
-        CGFloat highY = ((self.maxPrice - [lineModel.high floatValue]) * everyDollarHeight) + self.canvasTop+1;
-        CGFloat lowY = ((self.maxPrice - [lineModel.low floatValue]) * everyDollarHeight) + self.canvasTop+1;
+        CGFloat openY = ((self.maxPrice - [lineModel.open floatValue]) * everyDollarHeight) + self.canvasTop+self.configureKlineYAxisPadding;
+        CGFloat closeY = ((self.maxPrice - [lineModel.close floatValue]) * everyDollarHeight) + self.canvasTop+self.configureKlineYAxisPadding;
+        CGFloat highY = ((self.maxPrice - [lineModel.high floatValue]) * everyDollarHeight) + self.canvasTop+self.configureKlineYAxisPadding;
+        CGFloat lowY = ((self.maxPrice - [lineModel.low floatValue]) * everyDollarHeight) + self.canvasTop+self.configureKlineYAxisPadding;
         
-        CGFloat ma5Y = ((self.maxPrice - [lineModel.ma5 floatValue])*everyDollarHeight)+self.canvasTop+1;
-        CGFloat ma10Y = ((self.maxPrice - [lineModel.ma10 floatValue])*everyDollarHeight)+self.canvasTop+1;
-        CGFloat ma20Y = ((self.maxPrice - [lineModel.ma20 floatValue])*everyDollarHeight)+self.canvasTop+1;
+        CGFloat ma5Y = ((self.maxPrice - [lineModel.ma5 floatValue])*everyDollarHeight)+self.canvasTop+self.configureKlineYAxisPadding;
+        CGFloat ma10Y = ((self.maxPrice - [lineModel.ma10 floatValue])*everyDollarHeight)+self.canvasTop+self.configureKlineYAxisPadding;
+        CGFloat ma20Y = ((self.maxPrice - [lineModel.ma20 floatValue])*everyDollarHeight)+self.canvasTop+self.configureKlineYAxisPadding;
         
         
         CGFloat volumeHeight = [lineModel.volume integerValue] * unitVolumeHeight;
@@ -1403,13 +1418,13 @@
     CGFloat startPointY = self.canvasTop + self.canvasKlineHeight/2;
     ZNStockTimeSharingModel *model = self.KTimeDataArray[index];
     if (self.maxPrice - self.minPrice> 0) {
-        startPointY = (self.maxPrice - [model.price floatValue])*self.configurePriceUnitHeight + self.canvasTop + 1;
+        startPointY = (self.maxPrice - [model.price floatValue])*self.configurePriceUnitHeight + self.canvasTop + self.configureKlineYAxisPadding;
     }else {//涨停或者跌停
         if (self.maxPrice > self.YesterdayClosingPrice) {//涨停
-            startPointY = self.canvasTop + 1;
+            startPointY = self.canvasTop + self.configureKlineYAxisPadding;
         }
         if (self.maxPrice < self.YesterdayClosingPrice) {//跌停
-            startPointY = self.canvasKlineBottom - 1;
+            startPointY = self.canvasKlineBottom - self.configureKlineYAxisPadding;
         }
     }
     
@@ -1432,7 +1447,7 @@
     
     ZNStockKlineModel *model = self.KlineDataArray[index];
     
-    CGFloat startPointY = ((self.maxPrice - [model.close floatValue]) * self.configurePriceUnitHeight) + self.canvasTop+1;
+    CGFloat startPointY = ((self.maxPrice - [model.close floatValue]) * self.configurePriceUnitHeight) + self.canvasTop+ self.configureKlineYAxisPadding;
     
     
     

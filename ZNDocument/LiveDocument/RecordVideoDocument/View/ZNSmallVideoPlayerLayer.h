@@ -11,7 +11,17 @@
 @interface ZNSmallVideoPlayerLayer : CALayer
 
 
-@property(nonatomic, nonnull, strong)NSURL *video_url;
+@property(nonatomic, nullable, strong)NSURL *video_url;
+
+
+- (void)pausePlay;
+- (void)play;
+
+
+@property(nonatomic, copy)void(^ _Nullable prepareToPlay)(void);
+
+
+
 
 
 @end

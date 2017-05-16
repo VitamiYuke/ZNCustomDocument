@@ -16,8 +16,21 @@
 #import "ZNRecordVideoController.h"
 #import <ReplayKit/ReplayKit.h>
 #import "ZNFullScreenRecordConsoleWindow.h"
+#import "ZNRecordVideoToolManager.h"
+#import "ZNSmallVideoPlayView.h"
+#import "ZNRecordVideoEditController.h"
+
 @interface ZNLiveTestController ()<RPPreviewViewControllerDelegate>
 //@property(nonatomic, strong)ZNAVPlayerView *plaver;
+
+
+@property(nonatomic, strong)UIImageView *coverImage;
+
+
+@property(nonatomic, strong)ZNOutputVideoModel *videoModel;
+
+@property(nonatomic, strong)ZNSmallVideoPlayView *playView;
+
 
 @end
 
@@ -116,6 +129,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    self.title = @"录像";
+    
+    
     __weak typeof(self) weakSelf = self;
     ZNTestButton *playBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(50, 50, 100, 50) title:@"直播列表" action:^{
         [weakSelf.navigationController pushViewController:[[ZNLivePlayListController alloc] init] animated:YES];
@@ -164,7 +181,21 @@
     
     
     ZNTestButton *recordVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(200, 150, 100, 50) title:@"录制" action:^{
-        [weakSelf presentViewController:[[ZNRecordVideoController alloc] init] animated:YES completion:NULL];
+        
+        znStrongSelf(weakSelf);
+        ZNRecordVideoController *controller = [[ZNRecordVideoController alloc] init];
+        controller.processedVideo = ^(ZNOutputVideoModel *outputModel) {
+            MyLog(@"时间长度:%d",outputModel.video_time);
+            MyLog(@"存储地址:%@",outputModel.outputPath);
+            MyLog(@"封面地址:%@",outputModel.cover);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strongSelf.videoModel = outputModel;
+                strongSelf.coverImage.image = outputModel.cover;
+            });
+        };
+        
+        [weakSelf presentViewController:controller animated:YES completion:NULL];
+        
         
     }];
     [self.view addSubview:recordVideoBtn];
@@ -182,7 +213,50 @@
     }];
     [self.view addSubview:stopRecordVideoBtn];
     
+    
+    [self.view addSubview:self.coverImage];
+    
+    
+    
+    
+    ZNTestButton *clearVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(240, 310, 100, 50) title:@"清除文件" action:^{
+        [ZNRecordVideoToolManager clearAllTempProcessedVideos];
+        
+    }];
+    [self.view addSubview:clearVideoBtn];
+    
+    
+    ZNTestButton *editVideoBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(240, 370, 100, 50) title:@"编辑视频" action:^{
+       
+        
+        NSArray *tempArray = [ZNRecordVideoToolManager getAllTempProcessedVideosLocalNames];
+        if (tempArray.count) {
+            
+            NSString *path = [ZNRecordVideoToolManager getAbsolutePathWithLocalName:[tempArray firstObject]];
+            
+            ZNRecordVideoEditController *editController = [[ZNRecordVideoEditController alloc] init];
+            editController.video_url = [NSURL fileURLWithPath:path];
+            editController.deleteFinish = ^{
+                MyLog(@"删除了此世平");
+            };
+            [weakSelf.navigationController pushViewController:editController animated:YES];
+        } 
+        
+    }];
+    [self.view addSubview:editVideoBtn];
+
+    
+    
+//    self.navigationController.navigationItem.rightBarButtonItems = @[[UIBarButtonItem itemWithSpacer],[UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction)]];
+//    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction)];
+//    
+    
 }
+
+- (void)clickBackAction{
+    MyLog(@"卡卡");
+}
+
 
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -234,6 +308,42 @@
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
     return UIInterfaceOrientationPortrait;
+}
+
+
+#pragma mark - 视频播放
+
+
+- (ZNSmallVideoPlayView *)playView{
+    if (!_playView) {
+        _playView = [[ZNSmallVideoPlayView alloc] initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, SCREENT_HEIGHT)];
+    }
+    return _playView;
+}
+
+- (UIImageView *)coverImage{
+    if (!_coverImage) {
+        _coverImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 310, 100, 160)];
+        _coverImage.userInteractionEnabled = YES;
+//        _coverImage.image = [UIImage imageNamed:@"gradual_index_01txt"];
+        [_coverImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playVideo)]];
+    }
+    return _coverImage;
+}
+
+- (void)playVideo{
+    
+    if (self.videoModel.outputPath) {
+//        [[[UIApplication sharedApplication] keyWindow] addSubview:self.playView];
+//        
+//        self.playView.videoUrl = [NSURL fileURLWithPath:self.videoModel.outputPath];
+        [ZNSmallVideoPlayView showWithVideoUrl:[NSURL fileURLWithPath:self.videoModel.outputPath] sourceImageView:self.coverImage];
+        
+    }
+    
+//    [ZNSmallVideoPlayView showWithVideoUrl:nil sourceImageView:self.coverImage];
+    
+    
 }
 
 

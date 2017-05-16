@@ -11,7 +11,7 @@
 
 @interface ZNSmallVideoPlayerLayer ()
 
-
+@property(nonatomic, strong)AVPlayerItem *currentPlayerItem;
 
 @end
 
@@ -27,10 +27,11 @@
 
 - (void)configurePlayInfoWithVideoURL:(NSURL *)video_url{
     
+    [self resetConfigure];
+    
     if (!video_url) {
         return;
     }
-    
     _urlAsset = [AVURLAsset assetWithURL:video_url];
     _playerItem = [AVPlayerItem playerItemWithAsset:_urlAsset];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
@@ -38,7 +39,10 @@
     _playerLayer.frame = self.bounds;
     
     
-    [ZNNoteCenter addObserver:self selector:@selector(videoPlayEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    if (_playerItem) {
+        self.currentPlayerItem = _playerItem;
+    }
+    
     
     [self addSublayer:_playerLayer];
     
@@ -47,11 +51,56 @@
     }
     
     
+    
 }
 
 - (void)setVideo_url:(NSURL *)video_url{
     _video_url = video_url;
     [self configurePlayInfoWithVideoURL:video_url];
+    
+}
+
+
+- (void)setCurrentPlayerItem:(AVPlayerItem *)currentPlayerItem{
+    
+    if (_currentPlayerItem == currentPlayerItem) {
+        return;
+    }
+    
+    if (_currentPlayerItem) {
+        [_currentPlayerItem removeObserver:self forKeyPath:@"status"];
+        [ZNNoteCenter removeObserver:self];
+    }
+    _currentPlayerItem = currentPlayerItem;
+    
+    if (currentPlayerItem) {
+        [ZNNoteCenter addObserver:self selector:@selector(videoPlayEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+       [currentPlayerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    }
+    
+}
+
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    
+    
+    if (object == self.currentPlayerItem) {
+        
+        if ([keyPath isEqualToString:@"status"]) {
+            
+            if (self.currentPlayerItem.status == AVPlayerItemStatusReadyToPlay) {
+                MyLog(@"将要开始播放");
+                if (self.prepareToPlay) {
+                    self.prepareToPlay();
+                }
+                
+            }
+            
+        }
+        
+        
+    }
     
 }
 
@@ -64,13 +113,13 @@
         MyLog(@"重置配置");
         [_player.currentItem cancelPendingSeeks];
         [_player.currentItem.asset cancelLoading];
-        [ZNNoteCenter removeObserver:self];
         [_player pause];
         _urlAsset = nil;
         _playerItem = nil;
         _player = nil;
         [_playerLayer removeFromSuperlayer];
         _playerLayer = nil;
+        self.currentPlayerItem = nil;
     }
 }
 
@@ -107,6 +156,19 @@
     
 }
 
+
+- (void)pausePlay{
+    if (_player) {
+        [_player pause];
+    }
+}
+
+
+- (void)play{
+    if (_player) {
+        [_player play];
+    }
+}
 
 
 

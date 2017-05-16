@@ -55,10 +55,6 @@
             infoModel.committeePoor = @"0.00";
         }
         
-        
-        
-        
-        
 
         return infoModel;
     }

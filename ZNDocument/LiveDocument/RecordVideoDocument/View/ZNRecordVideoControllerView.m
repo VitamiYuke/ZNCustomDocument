@@ -304,6 +304,12 @@
     if (!self.tipsLabel.hidden) {
         self.tipsLabel.hidden = YES;
     }
+    
+    if (!self.dismissBtn.hidden) {
+        self.dismissBtn.hidden = YES;
+    }
+    
+    
 }
 
 
@@ -381,7 +387,11 @@
     if (self.player.superlayer) {
         [self.player removeFromSuperlayer];
     }
-    [self.videoManager saveRecordVideoWithFileURL:self.videoManager.recordFileURL];
+    
+    if (self.processedVideo) {
+        [self.videoManager saveRecordVideoWithFileURL:self.videoManager.recordFileURL andToDealWithTheVideoFinish:self.processedVideo];
+    }
+    
     [self dismissAction];
 }
 
@@ -403,6 +413,8 @@
 - (void)judgeAccessPermissions{
     if (![self.videoManager isAvailableWithCamera] || ![self.videoManager isAvailableWithMic]) {
         [self.noAccessPermissionsAlert show];
+    }else{
+        [self configureFocusingWithPoint:CGPointMake(SCREENT_WIDTH/2, SCREENT_HEIGHT/2)];
     }
 }
 
@@ -485,16 +497,21 @@
         MyLog(@"刚刚聚焦 别瞎弄");
         return;
     }
+    [self configureFocusingWithPoint:touchPoint];
     
-    if (touchPoint.y > _outSideCircleFrame.origin.y) {
+}
+
+- (void)configureFocusingWithPoint:(CGPoint )point{
+    
+    if (point.y > _outSideCircleFrame.origin.y) {
         MyLog(@"太低了 别瞎弄");
         return;
     }
-
+    
     CAShapeLayer *focusLayer = self.videoManager.focusingLayer;
     if (focusLayer) {
         _canFocusAgain = NO;
-        _focusPoint = touchPoint;
+        _focusPoint = point;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         CABasicAnimation *focusAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
         focusAnimation.fromValue = (__bridge id)[self getFocusingCircleWithRadius:50 centerPoint:_focusPoint].CGPath;
@@ -506,12 +523,12 @@
         [self.videoManager configureCameraFocusingWithPoint:_focusPoint];
         [self performSelector:@selector(backAnimation:) withObject:focusLayer afterDelay:0.15];
         [self performSelector:@selector(focusLayerFade:) withObject:focusLayer afterDelay:2.2];
-  
+        
     }
-    
-    
-    
 }
+
+
+
 
 
 - (void)backAnimation:(id )sender{
