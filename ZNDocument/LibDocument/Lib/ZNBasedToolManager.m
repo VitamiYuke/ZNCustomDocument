@@ -7,7 +7,8 @@
 //
 
 #import "ZNBasedToolManager.h"
-
+#import <AVFoundation/AVFoundation.h>
+#import "ZNDrawerMainController.h"
 @implementation ZNBasedToolManager
 
 
@@ -125,6 +126,37 @@
     
     return shapeLayer;
 }
+
+#pragma mark - 设备权限
+
++ (BOOL)YukeToolIsAvailableWithCamera
+{
+    return [self isAvailableWithDeviveMediaType:AVMediaTypeVideo];
+}
++ (BOOL)YukeToolIsAvailableWithMic
+{
+    return [self isAvailableWithDeviveMediaType:AVMediaTypeAudio];
+}
+
++ (BOOL)isAvailableWithDeviveMediaType:(NSString *)mediaType
+{
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if(status == AVAuthorizationStatusDenied||status == AVAuthorizationStatusRestricted)
+        return NO;
+    else
+        return YES;
+}
+
+
+
+#pragma mark - 页面跳转
+
++ (void)YukePageJumpShowLeftDrawer{
+    ZN_showLeft(YES);
+}
+
+
+
 
 
 @end

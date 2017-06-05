@@ -19,7 +19,7 @@
 #import "ZNRecordVideoToolManager.h"
 #import "ZNSmallVideoPlayView.h"
 #import "ZNRecordVideoEditController.h"
-
+#import "ZNSkinCareCameraController.h"
 @interface ZNLiveTestController ()<RPPreviewViewControllerDelegate>
 //@property(nonatomic, strong)ZNAVPlayerView *plaver;
 
@@ -162,10 +162,15 @@
 //        NSString *path = [[NSBundle mainBundle] pathForResource:@"keep.mp4" ofType:nil];
 //        NSURL *url = [NSURL fileURLWithPath:path];
 //        [weakPalyer changePlayNewMovieWithUrl:url];
-        [weakSelf.navigationController pushViewController:[[ZNVideoPlayerController alloc] init] animated:YES];
+//        [weakSelf.navigationController pushViewController:[[ZNVideoPlayerController alloc] init] animated:YES];
 //        [weakSelf presentViewController:[[ZNVideoPlayerController alloc] init] animated:YES completion:^{
 //            
 //        }];
+        
+        ZNSkinCareCameraController *controller = [[ZNSkinCareCameraController alloc] init];
+
+        [weakSelf presentViewController:controller animated:YES completion:NULL];
+        
     }];
     [self.view addSubview:playUrlBtn];
     
@@ -194,6 +199,14 @@
             });
         };
         
+        
+        controller.processedImage = ^(UIImage *image) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strongSelf.coverImage.image = image;
+            });
+            
+        };
         [weakSelf presentViewController:controller animated:YES completion:NULL];
         
         
@@ -245,11 +258,28 @@
     }];
     [self.view addSubview:editVideoBtn];
 
+    ZNTestButton *audioInputBtn = [[ZNTestButton alloc] initWithFrame:CGRectMake(240, 430, 100, 50) title:@"音频输入" action:^{
+        
+    
+        NSArray *audios = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+        for (AVCaptureDevice *device in audios) {
+            MyLog(@"所有的音频设备:%@",device);
+        }
+        
+        
+//        AVCaptureDeviceDiscoverySession *discoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInMicrophone,AVCaptureDeviceTypeBuiltInWideAngleCamera,AVCaptureDeviceTypeBuiltInTelephotoCamera,AVCaptureDeviceTypeBuiltInDualCamera] mediaType:AVMediaTypeAudio position:AVCaptureDevicePositionFront];
+//        MyLog(@"音频类型:%@",discoverySession);
+//        NSArray *micDevice = [discoverySession devices];
+//        for (AVCaptureDevice *device in micDevice) {
+//            MyLog(@"音频的输入设备:%@",device);
+//        }
+        
+        
+        
+    }];
+    [self.view addSubview:audioInputBtn];
     
     
-//    self.navigationController.navigationItem.rightBarButtonItems = @[[UIBarButtonItem itemWithSpacer],[UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction)]];
-//    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction)];
-//    
     
 }
 

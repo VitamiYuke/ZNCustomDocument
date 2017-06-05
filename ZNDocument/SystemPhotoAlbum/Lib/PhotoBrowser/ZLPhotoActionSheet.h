@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ZNRecordVideoToolManager.h"
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZLSelectPhotoModel;
+
 
 @interface ZLPhotoActionSheet : UIView
 
@@ -63,6 +67,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showPhotoLibraryWithSender:(UIViewController *)sender
              lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
                         completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion;
+
+
+
+
+//处理视频
+@property(nonatomic, copy)void(^finishSucc)(ZNOutputVideoModel *outPutModel);
+
+
+
 
 NS_ASSUME_NONNULL_END
 

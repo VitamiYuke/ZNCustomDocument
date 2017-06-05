@@ -24,8 +24,6 @@
 
 @property(nonatomic, copy, readonly)NSString *file_path;
 
-
-
 //启动录制功能
 - (void)startRecordFunction;
 //关闭录制功能
@@ -42,6 +40,13 @@
 
 //焦距
 - (void)configureCameraFocusingLengthWithScale:(CGFloat )scale;
+
+
+//美颜 拍照
+- (void )startTakingPicturesFinish:(void(^)(UIImage *image))finishiPhoto;
+
+
+
 
 
 @end
@@ -102,7 +107,14 @@
 
 + (NSString *)getAbsolutePathWithLocalName:(NSString *)localVideosName;
 
+//设置麦克风为前置麦克风
++(BOOL )configureMicPhoneFront;
 
+//对本地视频进行处理
+- (void )configurePhoneVideoWithPHAsset:(PHAsset *)asset complete:(void(^)(ZNOutputVideoModel *dealedModel))finishSucc;
+
+//处理好一个URL
++ (void )configurePhotoVideoWithPHAsset:(PHAsset *)asset complete:(void(^)(NSURL *url)) finishSucc;
 
 
 

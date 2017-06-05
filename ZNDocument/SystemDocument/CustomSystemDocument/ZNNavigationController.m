@@ -43,7 +43,7 @@
     
     if (self.viewControllers.count > 0) {
         if (![viewController isKindOfClass:[ZNTableViewController class]]) { // 第一个tableView界面
-            viewController.navigationItem.leftBarButtonItems = @[[UIBarButtonItem itemWithSpacer],[UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction)]];
+            viewController.navigationItem.leftBarButtonItems = @[[UIBarButtonItem itemWithSpacer],[UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"navBackRed"] HighlightedImage:[UIImage imageNamed:@"navBackRed"] target:self action:@selector(clickBackAction) targetSize:CGSizeZero isArcProcessing:NO]];
         }
         
         /* 自动显示和隐藏tabbar */

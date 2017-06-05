@@ -14,4 +14,8 @@
 + (UIViewController *)getCurrentShowViewController;
 
 
++ (UIViewController *)getViewControllerWithOriginView:(UIView *)originView;
+
+
+
 @end

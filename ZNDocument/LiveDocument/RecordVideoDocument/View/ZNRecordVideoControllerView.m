@@ -28,6 +28,10 @@
 @property(nonatomic, strong)UITapGestureRecognizer *focusingGesture;
 @property(nonatomic, strong)UIPinchGestureRecognizer *pinchGesture;
 @property(nonatomic, strong)ZNSmallVideoPlayerLayer *player;
+@property(nonatomic, strong)UITapGestureRecognizer *tapGesture;
+@property(nonatomic, strong)CALayer *takingPictureLayer;
+@property(nonatomic, strong)UIImage *takingPictureImage;
+
 @end
 
 
@@ -40,6 +44,7 @@
     CGFloat _commitShowX;
     BOOL _canFocusAgain;
     CGPoint _focusPoint;
+    BOOL _isTakingPicture;
 }
 
 
@@ -145,6 +150,7 @@
 - (void)configureData{
     self.isFrontCamera = NO;
     _canFocusAgain = YES;
+    _isTakingPicture = NO;
     CGFloat normalOutSideRadiu = 75/2;
     _outSideCircleFrame = CGRectMake(SCREENT_WIDTH/2 - normalOutSideRadiu, SCREENT_HEIGHT - normalOutSideRadiu*2 - 50, normalOutSideRadiu*2, normalOutSideRadiu*2); //74 max 180/ 120  inside 80 60 / 52  40
     _circleCenterPoint = CGPointMake(_outSideCircleFrame.origin.x + normalOutSideRadiu, _outSideCircleFrame.origin.y + normalOutSideRadiu);
@@ -347,11 +353,16 @@
     
 //    //进行视频预览
     
-    if (self.videoManager.recordFileURL) {
-        [self.layer insertSublayer:self.player atIndex:1];
-        self.player.video_url = self.videoManager.recordFileURL;
+    if (_isTakingPicture) {
+        [self.layer insertSublayer:self.takingPictureLayer atIndex:1];
+    }else{
+        if (self.videoManager.recordFileURL) {
+            [self.layer insertSublayer:self.player atIndex:1];
+            self.player.video_url = self.videoManager.recordFileURL;
+        }
     }
     
+
 }
 
 
@@ -379,6 +390,9 @@
         [self.player removeFromSuperlayer];
     }
       
+    if (self.takingPictureLayer.superlayer) {
+        [self.takingPictureLayer removeFromSuperlayer];
+    }
     
 }
 
@@ -388,10 +402,24 @@
         [self.player removeFromSuperlayer];
     }
     
-    if (self.processedVideo) {
-        [self.videoManager saveRecordVideoWithFileURL:self.videoManager.recordFileURL andToDealWithTheVideoFinish:self.processedVideo];
+    if (self.takingPictureLayer.superlayer) {
+        [self.takingPictureLayer removeFromSuperlayer];
     }
     
+    
+    if (_isTakingPicture) {
+        
+        if (self.processedImage) {
+            self.processedImage(self.takingPictureImage);
+        }
+        
+    }else {
+        if (self.processedVideo) {
+            [self.videoManager saveRecordVideoWithFileURL:self.videoManager.recordFileURL andToDealWithTheVideoFinish:self.processedVideo];
+        }
+    }
+    
+   
     [self dismissAction];
 }
 
@@ -425,8 +453,96 @@
     [self addGestureRecognizer:self.doubleTapGesture];
     [self addGestureRecognizer:self.focusingGesture];
     [self addGestureRecognizer:self.pinchGesture];
+    [self addGestureRecognizer:self.tapGesture];
 }
 
+
+#pragma mark - 点击拍照
+
+- (CALayer *)takingPictureLayer{
+    if (!_takingPictureLayer) {
+        _takingPictureLayer = [CALayer layer];
+        _takingPictureLayer.frame = self.bounds;
+        _takingPictureLayer.contentsScale = [[UIScreen mainScreen] scale];
+    }
+    return _takingPictureLayer;
+}
+
+
+- (UITapGestureRecognizer *)tapGesture
+{
+    if (!_tapGesture) {
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
+        _tapGesture.delegate = self;
+    }
+    return _tapGesture;
+}
+
+- (void)tapAction:(UITapGestureRecognizer *)sender{
+    if (self.outSideCirce.hidden) {
+        MyLog(@"都没显示。弄啥咧");
+        return;
+    }
+    
+    
+    CGPoint touchPoint = [sender locationInView:self];
+    if (CGRectContainsPoint(_outSideCircleFrame, touchPoint)) {
+        MyLog(@"拍照");
+        _isTakingPicture = YES;
+        [self startTakingPicture];
+        [self stopTakingPicture];
+    }
+
+}
+
+
+- (void)startTakingPicture{
+    
+    if (!self.tipsLabel.hidden) {
+        self.tipsLabel.hidden = YES;
+    }
+    
+    if (!self.dismissBtn.hidden) {
+        self.dismissBtn.hidden = YES;
+    }
+    
+    [self.videoManager startTakingPicturesFinish:^(UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.takingPictureImage = image;
+            
+            self.takingPictureLayer.contents = (__bridge id _Nullable)(image.CGImage);
+            
+        });
+    }];
+}
+
+
+- (void)stopTakingPicture{
+    self.outSideCirce.hidden = YES;
+    self.inSideCircle.hidden = YES;
+    self.theRingCircle.hidden = YES;
+    self.dismissBtn.hidden = YES;
+    self.changeCameraBtn.hidden = YES;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startOperationAnimation) object:nil];
+    [self performSelector:@selector(startOperationAnimation) withObject:nil afterDelay:0.3];
+}
+
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    
+    CGPoint point = [touch locationInView:self];
+    
+    if (CGRectContainsPoint(_outSideCircleFrame, point)) {
+        return YES;
+    }
+    
+    
+    return NO;
+}
+
+
+
+#pragma mark- 长按录像
 
 - (UILongPressGestureRecognizer *)longPressGesture{
     if (!_longPressGesture) {
@@ -434,8 +550,6 @@
     }
     return _longPressGesture;
 }
-
-
 
 - (void)longPressAction:(UILongPressGestureRecognizer *)sender{
     
@@ -450,9 +564,9 @@
         MyLog(@"长安开始");
         CGPoint touchPoint = [sender locationInView:self];
         if (CGRectContainsPoint(_outSideCircleFrame, touchPoint)) {
+            _isTakingPicture = NO;
             [self startRecordingAnimation];
         }
-  
     }
     
     if (sender.state == UIGestureRecognizerStateEnded) {

@@ -13,7 +13,7 @@
 + (UIBarButtonItem*)itemWithSpacer;//用于消除左右边距
 
 //获取一个自定义图片的Item
-+ (UIBarButtonItem *)itemWithNormalImage:(UIImage *)normalImage HighlightedImage:(UIImage *)high_lighted_img target:(id)target action:(SEL)action;
++ (UIBarButtonItem *)itemWithNormalImage:(UIImage *)normalImage HighlightedImage:(UIImage *)high_lighted_img target:(id)target action:(SEL)action targetSize:(CGSize )targetSize isArcProcessing:(BOOL )isProcessing;
 
 
 

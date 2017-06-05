@@ -113,7 +113,7 @@ static ZLPhotoTool *sharePhotoTool = nil;
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL *stop) {
         //过滤掉视频和最近删除
-        if(collection.assetCollectionSubtype != 202 && collection.assetCollectionSubtype < 212){
+        if(collection.assetCollectionSubtype < 212){// collection.assetCollectionSubtype != 202 &&
             NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
             if (assets.count > 0) {
                 ZLPhotoAblumList *ablum = [[ZLPhotoAblumList alloc] init];
@@ -177,7 +177,7 @@ static ZLPhotoTool *sharePhotoTool = nil;
     
     PHFetchResult *result = [self fetchAssetsInAssetCollection:assetCollection ascending:ascending];
     [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (((PHAsset *)obj).mediaType == PHAssetMediaTypeImage) {
+        if (((PHAsset *)obj).mediaType == PHAssetMediaTypeImage || ((PHAsset *)obj).mediaType == PHAssetMediaTypeVideo) {
             [arr addObject:obj];
         }
     }];

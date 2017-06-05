@@ -15,7 +15,7 @@
 #import "ZLShowBigImgViewController.h"
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
-
+#import "ZNSelecteVideoFromPhotoAlbums.h"
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 {
     NSMutableArray<PHAsset *> *_arrayDataSources;
@@ -215,6 +215,7 @@
     size.width *= 2.5;
     size.height *= 2.5;
     weakify(self);
+    cell.btnSelect.hidden = YES;
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         cell.imageView.image = image;
@@ -225,15 +226,35 @@
             }
         }
     }];
-    cell.btnSelect.tag = indexPath.row;
-    [cell.btnSelect addTarget:self action:@selector(cell_btn_Click:) forControlEvents:UIControlEventTouchUpInside];
     
+    if (asset.mediaType == PHAssetMediaTypeImage) {
+        cell.btnSelect.hidden = NO;
+        cell.btnSelect.tag = indexPath.row;
+        [cell.btnSelect addTarget:self action:@selector(cell_btn_Click:) forControlEvents:UIControlEventTouchUpInside];
+    }
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    PHAsset *asset = _arrayDataSources[indexPath.row];
+    
+    if (asset.mediaType == PHAssetMediaTypeVideo) {
+        
+        if (_arraySelectPhotos.count) {
+            [MBProgressHUD showError:@"已选照片不能选视频呢"];
+            return;
+        }
+        
+        ZNSelecteVideoFromPhotoAlbums *video = [[ZNSelecteVideoFromPhotoAlbums alloc] init];
+        video.asset = asset;
+        video.DoneBlock = self.DoneBlock;
+        [self.navigationController pushViewController:video animated:YES];
+        
+        return;
+    }
     [self pushShowBigImgVCWithDataArray:_arrayDataSources selectIndex:indexPath.row];
 }
 

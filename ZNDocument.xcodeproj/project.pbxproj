@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D01AFC71ECEF626003948A8 /* ZNDrawerMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D01AFC61ECEF626003948A8 /* ZNDrawerMainController.m */; };
 		6D0319BC1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0319BB1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.m */; };
 		6D0558B11DB08A37003021AC /* ZNCoreTextTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0558B01DB08A37003021AC /* ZNCoreTextTestController.m */; };
 		6D0558B41DB08AF5003021AC /* ZNCoreTextLibCL.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0558B31DB08AF5003021AC /* ZNCoreTextLibCL.m */; };
@@ -22,9 +23,13 @@
 		6D08FF8D1E496DA9008A6DA8 /* dribbble512_imageio.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D08FF891E496DA9008A6DA8 /* dribbble512_imageio.png */; };
 		6D08FF951E496EE3008A6DA8 /* ermilio.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D08FF941E496EE3008A6DA8 /* ermilio.png */; };
 		6D08FF991E496F14008A6DA8 /* cube@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D08FF981E496F14008A6DA8 /* cube@2x.png */; };
+		6D0B3A381ECC2BCC00D43622 /* ZNSkinCareCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B3A371ECC2BCC00D43622 /* ZNSkinCareCameraController.m */; };
+		6D0B3A3B1ECC2BD900D43622 /* ZNSkinCareCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B3A3A1ECC2BD900D43622 /* ZNSkinCareCamera.m */; };
+		6D0B3A3E1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B3A3D1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.m */; };
 		6D0C9ACB1E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9ACA1E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.m */; };
 		6D0C9AD41E9E398C0059606C /* ZNStockDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9AD31E9E398C0059606C /* ZNStockDetailsView.m */; };
 		6D0C9AD71E9F0BA80059606C /* ZNStockDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C9AD61E9F0BA80059606C /* ZNStockDetailsCell.m */; };
+		6D119D2F1ECEA329000271EE /* ZNLeftDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D119D2E1ECEA329000271EE /* ZNLeftDrawerController.m */; };
 		6D13FFB21EA7332C003B4005 /* ZNRecordVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */; };
 		6D13FFB51EA73343003B4005 /* ZNRecordVideoControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB41EA73343003B4005 /* ZNRecordVideoControllerView.m */; };
 		6D13FFB81EA739BC003B4005 /* ZNRecordVideoToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13FFB71EA739BC003B4005 /* ZNRecordVideoToolManager.m */; };
@@ -201,6 +206,8 @@
 		6D55C9341E9B581100EB551A /* ZNStockDetailsInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D55C9331E9B581100EB551A /* ZNStockDetailsInfoModel.m */; };
 		6D55C9371E9B726A00EB551A /* ZNStockDetailsInfoToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D55C9361E9B726A00EB551A /* ZNStockDetailsInfoToolManager.m */; };
 		6D55C93A1E9B9AD300EB551A /* ZNStockDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D55C9391E9B9AD300EB551A /* ZNStockDetailsHeaderView.m */; };
+		6D5D15EF1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5D15EE1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.m */; };
+		6D5D16151ED7CDCE00280765 /* ZNVideoLoadingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5D16141ED7CDCE00280765 /* ZNVideoLoadingProgress.swift */; };
 		6D5F73221DD08BB200AB0E92 /* ZNLiveTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5F73211DD08BB200AB0E92 /* ZNLiveTestController.m */; };
 		6D5F73251DD08CB900AB0E92 /* ZNLivePlayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5F73241DD08CB900AB0E92 /* ZNLivePlayController.m */; };
 		6D5F73281DD08F8D00AB0E92 /* ZNCreatorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5F73271DD08F8D00AB0E92 /* ZNCreatorItem.m */; };
@@ -410,6 +417,8 @@
 
 /* Begin PBXFileReference section */
 		13DED0A1FCE9098AB12A766E /* Pods-ZNDocument.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZNDocument.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZNDocument/Pods-ZNDocument.release.xcconfig"; sourceTree = "<group>"; };
+		6D01AFC51ECEF626003948A8 /* ZNDrawerMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNDrawerMainController.h; sourceTree = "<group>"; };
+		6D01AFC61ECEF626003948A8 /* ZNDrawerMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNDrawerMainController.m; sourceTree = "<group>"; };
 		6D0319BA1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNKlineFiveBlockAndTheDetailsView.h; sourceTree = "<group>"; };
 		6D0319BB1E95E5CD008F292D /* ZNKlineFiveBlockAndTheDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNKlineFiveBlockAndTheDetailsView.m; sourceTree = "<group>"; };
 		6D0558AF1DB08A37003021AC /* ZNCoreTextTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNCoreTextTestController.h; sourceTree = "<group>"; };
@@ -436,12 +445,20 @@
 		6D08FF961E496EFC008A6DA8 /* google@2x.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = "google@2x.webp"; sourceTree = "<group>"; };
 		6D08FF971E496EFC008A6DA8 /* nyancat@2x.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = "nyancat@2x.webp"; sourceTree = "<group>"; };
 		6D08FF981E496F14008A6DA8 /* cube@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cube@2x.png"; sourceTree = "<group>"; };
+		6D0B3A361ECC2BCC00D43622 /* ZNSkinCareCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSkinCareCameraController.h; sourceTree = "<group>"; };
+		6D0B3A371ECC2BCC00D43622 /* ZNSkinCareCameraController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSkinCareCameraController.m; sourceTree = "<group>"; };
+		6D0B3A391ECC2BD900D43622 /* ZNSkinCareCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSkinCareCamera.h; sourceTree = "<group>"; };
+		6D0B3A3A1ECC2BD900D43622 /* ZNSkinCareCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSkinCareCamera.m; sourceTree = "<group>"; };
+		6D0B3A3C1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSkinCareCameraToolManager.h; sourceTree = "<group>"; };
+		6D0B3A3D1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSkinCareCameraToolManager.m; sourceTree = "<group>"; };
 		6D0C9AC91E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNCABasedAnimationWeakDelegate.h; sourceTree = "<group>"; };
 		6D0C9ACA1E9E051B0059606C /* ZNCABasedAnimationWeakDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNCABasedAnimationWeakDelegate.m; sourceTree = "<group>"; };
 		6D0C9AD21E9E398C0059606C /* ZNStockDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNStockDetailsView.h; sourceTree = "<group>"; };
 		6D0C9AD31E9E398C0059606C /* ZNStockDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsView.m; sourceTree = "<group>"; };
 		6D0C9AD51E9F0BA80059606C /* ZNStockDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNStockDetailsCell.h; sourceTree = "<group>"; };
 		6D0C9AD61E9F0BA80059606C /* ZNStockDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsCell.m; sourceTree = "<group>"; };
+		6D119D2D1ECEA329000271EE /* ZNLeftDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNLeftDrawerController.h; sourceTree = "<group>"; };
+		6D119D2E1ECEA329000271EE /* ZNLeftDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNLeftDrawerController.m; sourceTree = "<group>"; };
 		6D13FFB01EA7332C003B4005 /* ZNRecordVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoController.h; sourceTree = "<group>"; };
 		6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNRecordVideoController.m; sourceTree = "<group>"; };
 		6D13FFB31EA73343003B4005 /* ZNRecordVideoControllerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNRecordVideoControllerView.h; sourceTree = "<group>"; };
@@ -771,6 +788,10 @@
 		6D55C9361E9B726A00EB551A /* ZNStockDetailsInfoToolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsInfoToolManager.m; sourceTree = "<group>"; };
 		6D55C9381E9B9AD300EB551A /* ZNStockDetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNStockDetailsHeaderView.h; sourceTree = "<group>"; };
 		6D55C9391E9B9AD300EB551A /* ZNStockDetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNStockDetailsHeaderView.m; sourceTree = "<group>"; };
+		6D5D15ED1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNSelecteVideoFromPhotoAlbums.h; sourceTree = "<group>"; };
+		6D5D15EE1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNSelecteVideoFromPhotoAlbums.m; sourceTree = "<group>"; };
+		6D5D16131ED7CDCD00280765 /* ZNDocument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZNDocument-Bridging-Header.h"; sourceTree = "<group>"; };
+		6D5D16141ED7CDCE00280765 /* ZNVideoLoadingProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZNVideoLoadingProgress.swift; sourceTree = "<group>"; };
 		6D5F73201DD08BB200AB0E92 /* ZNLiveTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNLiveTestController.h; sourceTree = "<group>"; };
 		6D5F73211DD08BB200AB0E92 /* ZNLiveTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNLiveTestController.m; sourceTree = "<group>"; };
 		6D5F73231DD08CB900AB0E92 /* ZNLivePlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNLivePlayController.h; sourceTree = "<group>"; };
@@ -1162,6 +1183,19 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		6D0B3A331ECC2B7A00D43622 /* SkinCareDocument */ = {
+			isa = PBXGroup;
+			children = (
+				6D0B3A361ECC2BCC00D43622 /* ZNSkinCareCameraController.h */,
+				6D0B3A371ECC2BCC00D43622 /* ZNSkinCareCameraController.m */,
+				6D0B3A391ECC2BD900D43622 /* ZNSkinCareCamera.h */,
+				6D0B3A3A1ECC2BD900D43622 /* ZNSkinCareCamera.m */,
+				6D0B3A3C1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.h */,
+				6D0B3A3D1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.m */,
+			);
+			path = SkinCareDocument;
+			sourceTree = "<group>";
+		};
 		6D13FFAC1EA73304003B4005 /* RecordVideoDocument */ = {
 			isa = PBXGroup;
 			children = (
@@ -1179,6 +1213,8 @@
 				6D13FFB11EA7332C003B4005 /* ZNRecordVideoController.m */,
 				6DE7778B1EC1743600008005 /* ZNRecordVideoEditController.h */,
 				6DE7778C1EC1743600008005 /* ZNRecordVideoEditController.m */,
+				6D5D15ED1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.h */,
+				6D5D15EE1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1205,6 +1241,8 @@
 				6DE777861EC08A4300008005 /* ZNSmallVideoPlayView.m */,
 				6DE777901EC174E800008005 /* ZNVideoEditNavView.h */,
 				6DE777911EC174E800008005 /* ZNVideoEditNavView.m */,
+				6D5D16141ED7CDCE00280765 /* ZNVideoLoadingProgress.swift */,
+				6D5D16131ED7CDCD00280765 /* ZNDocument-Bridging-Header.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1873,6 +1911,7 @@
 		6D60756A1DC9E5A500B051FB /* LiveDocument */ = {
 			isa = PBXGroup;
 			children = (
+				6D0B3A331ECC2B7A00D43622 /* SkinCareDocument */,
 				6D13FFAC1EA73304003B4005 /* RecordVideoDocument */,
 				6D60756B1DC9E5A500B051FB /* Controller */,
 				6D60756C1DC9E5A500B051FB /* Lib */,
@@ -2570,6 +2609,8 @@
 				6DBBCDC11DE5699E00B21A62 /* LeftTabBarController.m */,
 				6DBBCDC31DE569B400B21A62 /* RightTabBarController.h */,
 				6DBBCDC41DE569B400B21A62 /* RightTabBarController.m */,
+				6D119D2D1ECEA329000271EE /* ZNLeftDrawerController.h */,
+				6D119D2E1ECEA329000271EE /* ZNLeftDrawerController.m */,
 			);
 			path = CustomSystemDocument;
 			sourceTree = "<group>";
@@ -2782,6 +2823,8 @@
 		CDAD91ED1D798FFE00878AB4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6D01AFC51ECEF626003948A8 /* ZNDrawerMainController.h */,
+				6D01AFC61ECEF626003948A8 /* ZNDrawerMainController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2942,6 +2985,7 @@
 					CD2DDEA71D585E8800DF4EB0 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MJRLFYFW8Q;
+						LastSwiftMigration = 0830;
 					};
 					CD2DDEC01D585E8800DF4EB0 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -3282,10 +3326,12 @@
 				6D205E421E488B9500D5CB80 /* NSObject+YYModel.m in Sources */,
 				6D205D5C1E48434800D5CB80 /* UIView+JKPicker.m in Sources */,
 				CDE367591D5C1F580015469D /* ZNAttributedLabel.m in Sources */,
+				6D5D15EF1ED3D85800280765 /* ZNSelecteVideoFromPhotoAlbums.m in Sources */,
 				6D205E211E488B9500D5CB80 /* CALayer+YYAdd.m in Sources */,
 				6D0C9AD71E9F0BA80059606C /* ZNStockDetailsCell.m in Sources */,
 				6D205D611E48788E00D5CB80 /* ZNGoodDemoCollectionTestController.m in Sources */,
 				6DAA0EC11DAB3B1300836E0B /* ZNUItableViewTestController.m in Sources */,
+				6D0B3A3E1ECC2E1E00D43622 /* ZNSkinCareCameraToolManager.m in Sources */,
 				6D205E321E488B9500D5CB80 /* YYDiskCache.m in Sources */,
 				6D205E911E48905900D5CB80 /* YYImageProgressiveExample.m in Sources */,
 				6DA775C21DD98E30006CCBD9 /* ZFPlayerModel.m in Sources */,
@@ -3332,6 +3378,7 @@
 				6D5F73251DD08CB900AB0E92 /* ZNLivePlayController.m in Sources */,
 				6DED088D1DD457EA00D8C2F2 /* ZNAVPlayerView.m in Sources */,
 				6D205EB11E48908D00D5CB80 /* YYTextAttributeExample.m in Sources */,
+				6D0B3A3B1ECC2BD900D43622 /* ZNSkinCareCamera.m in Sources */,
 				6D205E181E488B9400D5CB80 /* NSKeyedUnarchiver+YYAdd.m in Sources */,
 				6D205EC21E48909B00D5CB80 /* YYKeychainExample.m in Sources */,
 				CDAD91F31D7990D300878AB4 /* ZNTestButton.m in Sources */,
@@ -3342,6 +3389,7 @@
 				CD2DDEEC1D58812F00DF4EB0 /* ZNNavigationController.m in Sources */,
 				6D205EB81E48908D00D5CB80 /* YYTextCopyPasteExample.m in Sources */,
 				6DDB4DDC1E67F22200CAFB17 /* ZNStockDetailsModel.m in Sources */,
+				6D0B3A381ECC2BCC00D43622 /* ZNSkinCareCameraController.m in Sources */,
 				6DACFB531E7F83E50035C49D /* ZNKlineHeaderView.m in Sources */,
 				6D205E3B1E488B9500D5CB80 /* YYFrameImage.m in Sources */,
 				6D92B8151DD301A400328005 /* UIImage+TintColor.m in Sources */,
@@ -3351,6 +3399,7 @@
 				6D205E431E488B9500D5CB80 /* YYClassInfo.m in Sources */,
 				6D205EEA1E48914000D5CB80 /* T1StatusCell.m in Sources */,
 				6D205E3D1E488B9500D5CB80 /* YYImageCache.m in Sources */,
+				6D01AFC71ECEF626003948A8 /* ZNDrawerMainController.m in Sources */,
 				6DE777871EC08A4300008005 /* ZNSmallVideoPlayView.m in Sources */,
 				6D205E501E488B9500D5CB80 /* YYTextArchiver.m in Sources */,
 				6D205EB91E48908D00D5CB80 /* YYTextUndoRedoExample.m in Sources */,
@@ -3376,6 +3425,7 @@
 				6DE777921EC174E800008005 /* ZNVideoEditNavView.m in Sources */,
 				6D205F081E48916D00D5CB80 /* WBStatusComposeViewController.m in Sources */,
 				6DED088A1DD41B4000D8C2F2 /* ZNPlayerSlider.m in Sources */,
+				6D5D16151ED7CDCE00280765 /* ZNVideoLoadingProgress.swift in Sources */,
 				6D81BB991E135B8C002C2267 /* ZLBigImageCell.m in Sources */,
 				6D1E21031E9780F1002A4350 /* ZNAppDelegateConfigureManager.m in Sources */,
 				6D205E4D1E488B9500D5CB80 /* NSAttributedString+YYText.m in Sources */,
@@ -3395,6 +3445,7 @@
 				CDAD91E21D795FC500878AB4 /* ZNLocalStoreTestController.m in Sources */,
 				6D0C9AD41E9E398C0059606C /* ZNStockDetailsView.m in Sources */,
 				6D205E161E488B9400D5CB80 /* NSDate+YYAdd.m in Sources */,
+				6D119D2F1ECEA329000271EE /* ZNLeftDrawerController.m in Sources */,
 				CD32FDB61D86B8010019830B /* ZNAudioPlayView.m in Sources */,
 				6D205E301E488B9500D5CB80 /* UIView+YYAdd.m in Sources */,
 				6D81BB981E135B8C002C2267 /* ToastUtils.m in Sources */,
@@ -3557,6 +3608,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = MJRLFYFW8Q;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3596,6 +3648,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhangnan.nandd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ZNDocument/LiveDocument/RecordVideoDocument/View/ZNDocument-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3606,6 +3661,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = MJRLFYFW8Q;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3645,6 +3701,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhangnan.nandd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ZNDocument/LiveDocument/RecordVideoDocument/View/ZNDocument-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -3652,6 +3710,7 @@
 		CD2DDED91D585E8800DF4EB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = ZNDocumentTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3664,6 +3723,7 @@
 		CD2DDEDA1D585E8800DF4EB0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = ZNDocumentTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3676,6 +3736,7 @@
 		CD2DDEDC1D585E8800DF4EB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZNDocumentUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhangnanboy..ZNDocumentUITests;
@@ -3687,6 +3748,7 @@
 		CD2DDEDD1D585E8800DF4EB0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZNDocumentUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhangnanboy..ZNDocumentUITests;

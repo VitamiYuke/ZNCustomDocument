@@ -7,6 +7,7 @@
 //
 
 #import "ZNRegularHelp.h"
+#import "ZNDrawerMainController.h"
 
 @implementation ZNRegularHelp
 
@@ -37,6 +38,12 @@
     else
         result = window.rootViewController;
     
+    
+    if ([result isKindOfClass:[ZNDrawerMainController class]]) {
+        ZNDrawerMainController* drawerController = (ZNDrawerMainController*)result;
+        result = drawerController.mainViewController;
+    }
+    
     if ([result isKindOfClass:[UITabBarController class]]) {
         UITabBarController* tabbar = (UITabBarController*)result;
         result = tabbar.selectedViewController;
@@ -48,6 +55,20 @@
     }
     return result;
 }
+
+
++ (UIViewController *)getViewControllerWithOriginView:(UIView *)originView{
+    if (originView) {
+        for (UIView* next = [originView superview]; next; next = next.superview) {
+            UIResponder* nextResponder = [next nextResponder];
+            if ([nextResponder isKindOfClass:[UIViewController class]]) {
+                return (UIViewController*)nextResponder;
+            }
+        }
+    }
+    return nil;
+}
+
 
 
 @end

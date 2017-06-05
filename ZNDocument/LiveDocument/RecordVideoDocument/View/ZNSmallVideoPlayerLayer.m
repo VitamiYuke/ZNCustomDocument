@@ -50,8 +50,6 @@
         [_player play];
     }
     
-    
-    
 }
 
 - (void)setVideo_url:(NSURL *)video_url{
@@ -135,7 +133,7 @@
                 [_player play];
             }
         }];
-
+        
     }
     
 }

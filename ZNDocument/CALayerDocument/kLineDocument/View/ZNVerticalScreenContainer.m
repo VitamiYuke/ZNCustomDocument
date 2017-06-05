@@ -196,7 +196,8 @@
         return;
     }
     
-    UIViewController *currentControlelr = [ZNRegularHelp getCurrentShowViewController];
+    UIViewController *currentControlelr = [ZNRegularHelp getViewControllerWithOriginView:self];
+    
     CGPoint controllerPoint = [gesture locationInView:currentControlelr.view];
     MyLog(@"当前控制器的位置:%@",NSStringFromCGPoint(controllerPoint));
     CGFloat touchY = controllerPoint.y;

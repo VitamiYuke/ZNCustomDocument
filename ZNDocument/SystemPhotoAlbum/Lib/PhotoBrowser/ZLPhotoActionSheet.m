@@ -332,12 +332,26 @@ static char RelatedKey;
         weakify(self);
         __weak typeof(photoBrowser) weakPB = photoBrowser;
         [photoBrowser setDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selPhotoModels, BOOL isSelectOriginalPhoto) {
+            
             strongify(weakSelf);
             __strong typeof(weakPB) strongPB = weakPB;
-            strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-            [strongSelf.arraySelectPhotos removeAllObjects];
-            [strongSelf.arraySelectPhotos addObjectsFromArray:selPhotoModels];
-            [strongSelf requestSelPhotos:strongPB];
+            
+            BOOL isImage = YES;
+            if (selPhotoModels.count == 1) {
+                ZLSelectPhotoModel *model = [selPhotoModels firstObject];
+                if (model.asset.mediaType == PHAssetMediaTypeVideo) {
+                    isImage = NO;
+                    [self configureVideoWithSelPhotos:strongPB asset:model.asset];
+                }
+            }
+            
+            
+            if (isImage) {
+                strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+                [strongSelf.arraySelectPhotos removeAllObjects];
+                [strongSelf.arraySelectPhotos addObjectsFromArray:selPhotoModels];
+                [strongSelf requestSelPhotos:strongPB];
+            }
         }];
         
         [photoBrowser setCancelBlock:^{
@@ -348,6 +362,29 @@ static char RelatedKey;
         [self presentVC:photoBrowser];
     }
 }
+
+
+#pragma mark - 处理视频
+- (void)configureVideoWithSelPhotos:(UIViewController *)vc asset:(PHAsset *)asset{
+//    [MBProgressHUD showMessage:@"正在处理"];
+    
+    ZNRecordVideoToolManager *mangager = [[ZNRecordVideoToolManager alloc] init];
+    [mangager configurePhoneVideoWithPHAsset:asset complete:^(ZNOutputVideoModel *dealedModel) {
+
+        if (self.finishSucc) {
+            self.finishSucc(dealedModel);
+        }
+//        [MBProgressHUD hideHUD];
+        [self hide];
+        [vc.navigationController dismissViewControllerAnimated:YES completion:nil];
+        
+    }];
+
+}
+
+
+
+
 
 - (IBAction)btnCancel_Click:(id)sender
 {

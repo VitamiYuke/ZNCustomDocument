@@ -11,14 +11,17 @@
 #import "ZLDefine.h"
 #import "JKImagePickerController.h"
 #import "ZNRecordVideoController.h"
+#import "ZNSmallVideoPlayView.h"
+
+
 @interface ZNSysPhotoAlbumTestController ()<JKImagePickerControllerDelegate>
 
 @property (nonatomic, strong) NSArray<ZLSelectPhotoModel *> *lastSelectMoldels;
 
 @property (strong,nonatomic)NSMutableArray *assetsArray;//类似微博的已选相册
 
-
-
+@property(nonatomic, strong)UIImageView *coverImage;
+@property(nonatomic, strong)ZNOutputVideoModel *videoModel;
 
 @end
 
@@ -46,6 +49,13 @@
     [self.view addSubview:weiboAlbumAction];
     
     
+    ZNTestButton *weichatAlbumAction = [[ZNTestButton alloc] initWithFrame:CGRectMake(160, 120, 150, 60) title:@"类似微信朋友圈" action:^{
+        [weakSelf getAlbumLikeWX];
+    }];
+    [self.view addSubview:weichatAlbumAction];
+    
+    [self.view addSubview:self.coverImage];
+    
 }
 
 
@@ -68,7 +78,7 @@
 // 创建
 - (void)lookPhotoAlbum
 {
-    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] initWithIsHaveSmallVideo:NO];
     //设置照片最大选择数
     actionSheet.maxSelectCount = 3;
     weakify(self);    
@@ -77,6 +87,20 @@
         strongSelf.lastSelectMoldels = selectPhotoModels; //用来标记已选的图片
         MyLog(@"%@",selectPhotos);
     }];
+    
+    actionSheet.finishSucc = ^(ZNOutputVideoModel * _Nonnull outPutModel) {
+        strongify(weakSelf);
+        MyLog(@"时间长度:%d",outPutModel.video_time);
+        MyLog(@"存储地址:%@",outPutModel.outputPath);
+        MyLog(@"封面地址:%@",outPutModel.cover);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            strongSelf.videoModel = outPutModel;
+            strongSelf.coverImage.image = outPutModel.cover;
+        });
+    };
+    
+    
+    
     
 }
 
@@ -122,6 +146,63 @@
 }
 
 
+
+
+
+#pragma mark - 蕾丝微信朋友圈
+- (void)getAlbumLikeWX{
+    
+    
+    znWeakSelf(self);
+    LCActionSheet *sheet = [[LCActionSheet alloc] initWithTitle:nil cancelButtonTitle:@"取消" clicked:^(LCActionSheet *actionSheet, NSInteger buttonIndex) {
+        
+        
+        if (buttonIndex == 1) {
+            MyLog(@"手机拍摄");
+        }
+        
+        
+        
+        if (buttonIndex == 2) {
+            
+            [weakSelf lookPhotoAlbum];
+            
+            
+        }
+        
+        
+    } otherButtonTitles:@"拍摄",@"从手机相册中选择", nil];
+    [sheet show];
+}
+
+
+
+
+- (UIImageView *)coverImage{
+    if (!_coverImage) {
+        _coverImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 190, 100, 160)];
+        _coverImage.userInteractionEnabled = YES;
+        //        _coverImage.image = [UIImage imageNamed:@"gradual_index_01txt"];
+        [_coverImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playVideo)]];
+    }
+    return _coverImage;
+}
+
+
+- (void)playVideo{
+    
+    if (self.videoModel.outputPath) {
+        //        [[[UIApplication sharedApplication] keyWindow] addSubview:self.playView];
+        //
+        //        self.playView.videoUrl = [NSURL fileURLWithPath:self.videoModel.outputPath];
+        [ZNSmallVideoPlayView showWithVideoUrl:[NSURL fileURLWithPath:self.videoModel.outputPath] sourceImageView:self.coverImage];
+        
+    }
+    
+    //    [ZNSmallVideoPlayView showWithVideoUrl:nil sourceImageView:self.coverImage];
+    
+    
+}
 
 
 

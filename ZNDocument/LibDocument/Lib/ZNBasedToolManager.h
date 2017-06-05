@@ -40,10 +40,24 @@ ifDottedConfigureDottedLineLength:(CGFloat )length
 //CAShapeLayer
 +(CAShapeLayer *)YukeToolGetShaperLayerWithFillColor:(UIColor *)fillColor strokeColor:(UIColor *)strokeColor lineWidth:(CGFloat )lineWidth path:(UIBezierPath *)path;
 
+//获取设备权限设置
+/**
+ 相机是否可以用
+ */
++ (BOOL)YukeToolIsAvailableWithCamera;
+
+/**
+ 麦克风是否可以用
+ */
++ (BOOL)YukeToolIsAvailableWithMic;
 
 
 
 
+
+#pragma mark - 页面跳转
+
++ (void)YukePageJumpShowLeftDrawer;
 
 
 

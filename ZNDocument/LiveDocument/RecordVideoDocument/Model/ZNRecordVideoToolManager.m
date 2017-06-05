@@ -26,11 +26,146 @@
 
 @property(nonatomic, strong)NSDateFormatter *dateFormatter;
 
+
+//照片输入设备
+@property(nonatomic, strong)AVCaptureStillImageOutput *imageOutput;
+
+
+
+
+
 @end
 
 @implementation ZNRecordVideoToolManager{
     CGRect _previewFrame;
 }
+
+#pragma mark - 照片的输出设备
+- (AVCaptureStillImageOutput *)imageOutput{
+    if (!_imageOutput) {
+        _imageOutput = [[AVCaptureStillImageOutput alloc] init];
+        
+        NSDictionary *ouputSetting = @{AVVideoCodecKey:AVVideoCodecJPEG};
+        [_imageOutput setOutputSettings:ouputSetting];
+        
+    }
+    return _imageOutput;
+}
+
+
+
+- (void)startTakingPicturesFinish:(void (^)(UIImage *))finishiPhoto
+{
+    
+    // Find out the current orientation and tell the still image output.
+    AVCaptureConnection *stillImageConnection = [self.imageOutput connectionWithMediaType:AVMediaTypeVideo];
+    [stillImageConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+    
+    if (self.isFrontCamera) {
+        if (stillImageConnection.supportsVideoMirroring) {
+            stillImageConnection.videoMirrored = YES;
+        }
+    }
+    
+    [self.imageOutput captureStillImageAsynchronouslyFromConnection:stillImageConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+        if (error) {
+            [self displayErrorOnMainQueue:error withMessage:@"拍照失败"];
+        }else{
+            NSData *jpegData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+            
+            UIImage *image = [UIImage imageWithData:jpegData];
+             __block NSString *assetIndentifier = nil;
+            
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                PHAssetChangeRequest   *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+                assetIndentifier = request.placeholderForCreatedAsset.localIdentifier;
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                if (success) {
+                    MyLog(@"保存相册成功");
+                    if (assetIndentifier) {
+                        PHAsset *asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[assetIndentifier] options:nil] lastObject];
+                        [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image, NSDictionary *info) {
+                            finishiPhoto(image);
+                        }];
+  
+                    }
+                }else{
+                    MyLog(@"错误:%@",error);
+                }
+            }];
+  
+        }
+    }];
+}
+
+
+- (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *, NSDictionary *))completion
+{
+    //请求大图界面，当切换图片时，取消上一张图片的请求，对于iCloud端的图片，可以节省流量
+    static PHImageRequestID requestID = -1;
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat width = SCREENT_WIDTH;
+    if (requestID >= 1 && size.width/width==scale) {
+        [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
+    }
+    
+    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+    /**
+     resizeMode：对请求的图像怎样缩放。有三种选择：None，默认加载方式；Fast，尽快地提供接近或稍微大于要求的尺寸；Exact，精准提供要求的尺寸。
+     deliveryMode：图像质量。有三种值：Opportunistic，在速度与质量中均衡；HighQualityFormat，不管花费多长时间，提供高质量图像；FastFormat，以最快速度提供好的质量。
+     这个属性只有在 synchronous 为 true 时有效。
+     */
+    option.synchronous = true;
+    option.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    option.resizeMode = resizeMode;//控制照片尺寸
+    //option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
+    option.networkAccessAllowed = YES;
+    
+    /*
+     info字典提供请求状态信息:
+     PHImageResultIsInCloudKey：图像是否必须从iCloud请求
+     PHImageResultIsDegradedKey：当前UIImage是否是低质量的，这个可以实现给用户先显示一个预览图
+     PHImageResultRequestIDKey和PHImageCancelledKey：请求ID以及请求是否已经被取消
+     PHImageErrorKey：如果没有图像，字典内的错误信息
+     */
+    
+    requestID = [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
+        BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey];
+        //不要该判断，即如果该图片在iCloud上时候，会先显示一张模糊的预览图，待加载完毕后会显示高清图
+        // && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]
+        if (downloadFinined && completion) {
+            completion(image, info);
+        }
+    }];
+}
+
+
+
+
+// utility routing used during image capture to set up capture orientation
+- (AVCaptureVideoOrientation)avOrientationForDeviceOrientation:(UIDeviceOrientation)deviceOrientation
+{
+    AVCaptureVideoOrientation result = (AVCaptureVideoOrientation)deviceOrientation;
+    if ( deviceOrientation == UIDeviceOrientationLandscapeLeft )
+        result = AVCaptureVideoOrientationLandscapeRight;
+    else if ( deviceOrientation == UIDeviceOrientationLandscapeRight )
+        result = AVCaptureVideoOrientationLandscapeLeft;
+    return result;
+}
+
+// utility routine to display error aleart if takePicture fails
+- (void)displayErrorOnMainQueue:(NSError *)error withMessage:(NSString *)message
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ (%d)", message, (int)[error code]]
+                                                            message:[error localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    });
+}
+
 
 #pragma mark - 视频输出代理
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections{
@@ -40,6 +175,7 @@
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
     NSLog(@"视频录制完成.");
     _recordFileURL = outputFileURL;
+    
 }
 
 #pragma mark - 录制功能
@@ -260,8 +396,7 @@
         if (lockError) {
             MyLog(@"聚焦失败:%@",[lockError localizedDescription]);
         }
-        
-        
+ 
         
     }
     
@@ -272,7 +407,7 @@
     
     self.isFrontCamera = NO;
     
-    
+    [ZNRecordVideoToolManager configureMicPhoneFront];
     //添加后只摄像头输入
     if ([self.captureSession canAddInput:self.backCameraInput]) {
         [self.captureSession addInput:self.backCameraInput];
@@ -285,6 +420,11 @@
     //添加输出
     if ([self.captureSession canAddOutput:self.movieFileOutPut]) {
         [self.captureSession addOutput:self.movieFileOutPut];
+    }
+    
+    //照片
+    if ([self.captureSession canAddOutput:self.imageOutput]) {
+        [self.captureSession addOutput:self.imageOutput];
     }
     
     
@@ -614,37 +754,6 @@
     return assets;
 }
 
-- (ZNOutputVideoModel *)getOutputVideoAssetWithSourceURL:(NSURL *)sourceURL complete:(void (^)(void))finishSucc{
-    
-    if (!sourceURL) {
-        return nil;
-    }
-    
-    ZNOutputVideoModel *model = [[ZNOutputVideoModel alloc] init];
-    model.outputPath = [self detailsVideoPathDesc];
-    AVAsset *asset = [AVAsset assetWithURL:sourceURL];
-    model.cover = [self getCoverWithAVAsset:asset];
-    AVAssetExportSession *exportSession = [AVAssetExportSession exportSessionWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
-    exportSession.shouldOptimizeForNetworkUse = YES;
-    exportSession.outputURL = [NSURL fileURLWithPath:model.outputPath];
-    exportSession.outputFileType = AVFileTypeMPEG4;
-    [exportSession exportAsynchronouslyWithCompletionHandler:^{
-        int exportStatus = exportSession.status;;
-        switch (exportStatus) {
-            case AVAssetExportSessionStatusFailed:
-                MyLog(@"转码失败");
-                break;
-            case AVAssetExportSessionStatusCompleted:
-                MyLog(@"转码完成");
-                finishSucc();
-                break;
-            default:
-                break;
-        }
-    }];
-    return model;
-}
-
 
 //压缩存储的地址
 - (NSString *)defaultVideosPath{
@@ -660,10 +769,9 @@
 
 
 //详细输出地址
-- (NSString *)detailsVideoPathDesc{
+- (NSString *)detailsVideoPathDescWithLogoDesc:(NSString *)desc{
     NSString *defaultPath = [self defaultVideosPath];
-    NSString *dateString = [self.dateFormatter stringFromDate:[NSDate date]];
-    NSString *detailsPath = [defaultPath stringByAppendingPathComponent:[NSString stringWithFormat:@"YukeMovie_%@.mp4",dateString]];
+    NSString *detailsPath = [defaultPath stringByAppendingPathComponent:[NSString stringWithFormat:@"YukeMovie_%@.mp4",desc]];
     MyLog(@"存储视频的详细地址:%@",detailsPath);
     return detailsPath;
 }
@@ -718,8 +826,11 @@
     
     
     ZNOutputVideoModel *model = [[ZNOutputVideoModel alloc] init];
-    model.outputPath = [self detailsVideoPathDesc];
-    MyLog(@"压缩处理的文件地址:%@",model.outputPath);
+    NSString *indentifier = asset.localIdentifier;
+    
+    indentifier = [indentifier stringByReplacingOccurrencesOfString:@"/" withString:@""];
+    
+    NSString *videoName = [NSString stringWithFormat:@"YukeMovie_%@.mp4",indentifier];
     
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     
@@ -730,26 +841,68 @@
         //缩略图
         model.cover = [self getCoverWithAVAsset:asset];
         model.video_time = [self getVideoTimeWithAVAsset:asset];
-        AVAssetExportSession *exportSession = [AVAssetExportSession exportSessionWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
-        exportSession.shouldOptimizeForNetworkUse = YES;
-        exportSession.outputURL = [NSURL fileURLWithPath:model.outputPath];
-        exportSession.outputFileType = AVFileTypeMPEG4;
-        [exportSession exportAsynchronouslyWithCompletionHandler:^{
-            int exportStatus = exportSession.status;;
-            switch (exportStatus) {
-                case AVAssetExportSessionStatusFailed:
-                    MyLog(@"转码失败");
-                    break;
-                case AVAssetExportSessionStatusCompleted:
-                    MyLog(@"转码完成");
-                    finishSucc(model);
-                    break;
-                default:
-                    break;
-            }
-        }];
-    
+        
+        BOOL isHaveLocalTemp = NO;
+        
+        NSString *absolutePath = [ZNRecordVideoToolManager getAbsolutePathWithLocalName:videoName];
+        if (absolutePath) {
+            MyLog(@"本地已对该视频处理过地址:%@",absolutePath);
+            model.outputPath = absolutePath;
+            isHaveLocalTemp = YES;
+            finishSucc(model);
+        }else{
+            model.outputPath = [self detailsVideoPathDescWithLogoDesc:indentifier];
+        }
+        MyLog(@"压缩处理的文件地址:%@",model.outputPath);
+        
+        if (!isHaveLocalTemp) {
+            AVAssetExportSession *exportSession = [AVAssetExportSession exportSessionWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
+            exportSession.shouldOptimizeForNetworkUse = YES;
+            exportSession.outputURL = [NSURL fileURLWithPath:model.outputPath];
+            exportSession.outputFileType = AVFileTypeMPEG4;
+            [exportSession exportAsynchronouslyWithCompletionHandler:^{
+                int exportStatus = exportSession.status;;
+                switch (exportStatus) {
+                    case AVAssetExportSessionStatusFailed:
+                        MyLog(@"转码失败");
+                        break;
+                    case AVAssetExportSessionStatusCompleted:
+                        MyLog(@"转码完成");
+                        finishSucc(model);
+                        break;
+                    default:
+                        break;
+                }
+            }];
+        }
     }];
+}
+
+
++ (void)configurePhotoVideoWithPHAsset:(PHAsset *)asset complete:(void (^)(NSURL *))finishSucc{
+    
+    if (!asset) {
+        finishSucc(nil);
+        return;
+    }
+    
+    
+    if (asset.mediaType == PHAssetMediaTypeVideo) {
+        
+        PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+        options.version = PHImageRequestOptionsVersionCurrent;
+        options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+        
+        [[PHCachingImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+            AVURLAsset *urlAsset = (AVURLAsset *)asset;
+            finishSucc(urlAsset.URL);
+            
+        }];
+    }
+    
+    
+    
+    
 }
 
 
@@ -811,6 +964,51 @@
     return nil;
 }
 
+
++ (BOOL)configureMicPhoneFront{
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error) {
+        MyLog(@"%@",error);
+        return NO;
+    }
+    NSError *activeError = nil;
+    [audioSession setActive:YES error:&activeError];
+    if (activeError) {
+        MyLog(@"%@",activeError);
+        return NO;
+    }
+    NSArray *inputs = [audioSession availableInputs];
+    AVAudioSessionPortDescription *builtInMic = nil;
+    for (AVAudioSessionPortDescription * port in inputs) {
+        MyLog(@"可得到的音频输出输入:%@",port);
+        if ([port.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
+            builtInMic = port;
+            break;
+        }
+    }
+    
+    for (AVAudioSessionDataSourceDescription *source in builtInMic.dataSources) {
+        if ([source.orientation isEqualToString:AVAudioSessionOrientationFront]) {
+            NSError *sourceError = nil;
+            NSError *micError = nil;
+            [builtInMic setPreferredDataSource:source error:&sourceError];
+            if (sourceError) {
+                MyLog(@"%@",sourceError);
+                return NO;
+            }
+            [audioSession setPreferredInput:builtInMic error:&micError];
+            if (micError) {
+                MyLog(@"%@",micError);
+                return NO;
+            }
+            break;
+        }
+    }
+    return YES;
+}
 
 
 

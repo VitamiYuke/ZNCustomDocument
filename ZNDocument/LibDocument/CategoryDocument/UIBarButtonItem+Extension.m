@@ -25,14 +25,22 @@
 /**
  自定义图片导航拦
  */
-+ (UIBarButtonItem *)itemWithNormalImage:(UIImage *)normalImage HighlightedImage:(UIImage *)high_lighted_img target:(id)target action:(SEL)action{
++ (UIBarButtonItem *)itemWithNormalImage:(UIImage *)normalImage HighlightedImage:(UIImage *)high_lighted_img target:(id)target action:(SEL)action targetSize:(CGSize)targetSize isArcProcessing:(BOOL)isProcessing{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     // 设置图片
     [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
     [btn setBackgroundImage:high_lighted_img forState:UIControlStateHighlighted];
     // 设置尺寸
-    btn.size = btn.currentBackgroundImage.size;
+    if (CGSizeEqualToSize(targetSize, CGSizeZero)) {
+        btn.size = btn.currentBackgroundImage.size;
+    }else{
+        btn.size = targetSize;
+        if (isProcessing) {
+            [btn.layer setMasksToBounds:YES];
+            [btn.layer setCornerRadius:MIN(targetSize.width, targetSize.height)/2];
+        }
+    }
     return [[UIBarButtonItem alloc] initWithCustomView:btn];
 }
 

@@ -1,44 +1,38 @@
 //
-//  ZNRecordVideoController.m
+//  ZNSkinCareCameraController.m
 //  ZNDocument
 //
-//  Created by 张楠 on 17/4/19.
+//  Created by 张楠 on 2017/5/17.
 //  Copyright © 2017年 zhangnanboy. All rights reserved.
 //
 
-#import "ZNRecordVideoController.h"
-#import "ZNRecordVideoControllerView.h"
+#import "ZNSkinCareCameraController.h"
+#import "ZNSkinCareCamera.h"
 
-@interface ZNRecordVideoController ()
+@interface ZNSkinCareCameraController ()
 
-@property(nonatomic, strong)ZNRecordVideoControllerView *controllerView;
-
+@property(nonatomic, strong)ZNSkinCareCamera *skinCareCamera;
 
 @end
 
-@implementation ZNRecordVideoController
+@implementation ZNSkinCareCameraController
 
-- (ZNRecordVideoControllerView *)controllerView{
-    if (!_controllerView) {
-        _controllerView = [[ZNRecordVideoControllerView alloc] initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, SCREENT_HEIGHT)];
+
+
+- (ZNSkinCareCamera *)skinCareCamera{
+    if (!_skinCareCamera) {
+        _skinCareCamera = [[ZNSkinCareCamera alloc] initWithFrame:CGRectMake(0, 0, SCREENT_WIDTH, SCREENT_HEIGHT)];
     }
-    return _controllerView;
+    return _skinCareCamera;
 }
+
+
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.view addSubview:self.controllerView];
-    if (self.processedVideo) {
-        self.controllerView.processedVideo = self.processedVideo;
-    }
-    
-    
-    if (self.processedImage) {
-        self.controllerView.processedImage = self.processedImage;
-    }
-    
+    [self.view addSubview:self.skinCareCamera];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,6 +60,7 @@
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 }
+
 
 
 

@@ -11,7 +11,6 @@
 #import "ExpressTestController.h"
 #import "ZNBesselTestController.h"
 #import "CALayerTestController.h"
-#import "ZNSlideMenu.h"
 #import "ZNTestCell.h"
 #import "ZNLocalStoreTestController.h"
 #import "ZNStartTestController.h"
@@ -23,13 +22,13 @@
 #import "ZNSysPhotoAlbumTestController.h"
 #import "ZNGoodDemoCollectionTestController.h"
 #import "ODRefreshControl.h"
-@interface ZNTableViewController ()<UIScrollViewDelegate,ZNSlideMenuDelegate>
+@interface ZNTableViewController ()<UIScrollViewDelegate>
 
 @property(nonatomic, strong)NSMutableArray *dataArray;// 数据源
 
-@property(nonatomic,strong)UIButton *trigger;
 
-@property(nonatomic, strong)ZNSlideMenu *slideMenu;
+
+
 
 @property(nonatomic, strong)NSMutableArray *controllerNames;
 
@@ -58,37 +57,9 @@
     return _controllerNames;
 }
 
-- (UIButton *)trigger{
-    if (!_trigger) {
-        _trigger = [UIButton buttonWithType:UIButtonTypeCustom];
-        _trigger.frame = CGRectMake(SCREENT_WIDTH - 100 - 20, SCREENT_HEIGHT - 20 - 36 - 64 - 100, 100, 36);
-        [_trigger setTitle:@"Trigger" forState:UIControlStateNormal];
-        [_trigger setTitleColor:MyColor(0, 188, 255) forState:UIControlStateNormal];
-        _trigger.titleLabel.font = MyFont(20);
-        [_trigger addTarget:self action:@selector(triggerAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-    }
-    return _trigger;
-}
 
-- (ZNSlideMenu *)slideMenu
-{
-    if (!_slideMenu) {
-        _slideMenu = [[ZNSlideMenu alloc] initWithTitile:@[@"首页",@"消息",@"发布",@"发现",@"个人"]];
-        _slideMenu.menuClickBlock = ^(NSInteger index,NSString *title) {
-            MyLog(@"第%ld个的标题是%@",index,title);
-        };
-        _slideMenu.delegate = self;
-    }
-    return _slideMenu;
-}
 
-- (void)triggerAction:(UIButton *)sender
-{
-    MyLog(@"SlideMenu"); // 只有加载到window上的第一个View才会往上移动
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    [self.slideMenu trigger];
-}
+
 
 
 - (void)viewDidLoad {
@@ -121,8 +92,13 @@
     self.tableView.backgroundColor = MyColor(247, 247, 247);
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     
-//    [self.view addSubview:self.trigger];
     
+    self.navigationItem.leftBarButtonItems = @[[UIBarButtonItem itemWithSpacer],[UIBarButtonItem itemWithNormalImage:[UIImage imageNamed:@"YukeAvatar"] HighlightedImage:[UIImage imageNamed:@"YukeAvatar"] target:self action:@selector(personalCenterAction) targetSize:CGSizeMake(38, 38) isArcProcessing:YES]];
+    
+}
+
+- (void)personalCenterAction{
+    [ZNBasedToolManager YukePageJumpShowLeftDrawer];
 }
 
 
@@ -188,8 +164,8 @@
 #pragma mark - 滑动的ScrollView
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView // 使用UITableViewController会使加在上面的子控件随着tableView滑动而滑动
 {
-    self.trigger.y = scrollView.contentOffset.y + self.tableView.height - self.trigger.height - 20;
-    [self.view bringSubviewToFront:self.trigger];
+  
+    
 }
 
 // View controller-based status bar appearance 需要设置为YES
@@ -204,10 +180,6 @@
 //    return UIStatusBarAnimationSlide;
 //}
 
-#pragma mark - 侧滑消失
-- (void)finishHidden
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-}
+
 
 @end

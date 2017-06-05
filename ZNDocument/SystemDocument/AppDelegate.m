@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "ZNTabBarController.h"
 #import "ZNAppDelegateConfigureManager.h"
+#import "ZNLeftDrawerController.h"
+#import "ZNDrawerMainController.h"
 @interface AppDelegate ()
 
 @end
@@ -22,7 +24,9 @@
     self.isAllowFullScreenl = NO;
     
     ZNTabBarController *tabBarController = [[ZNTabBarController alloc] init];
-    [self.window setRootViewController:tabBarController];
+    ZNDrawerMainController *viewController = [ZNDrawerMainController zn_drawerViewControllerWithLeftViewController:[[ZNLeftDrawerController alloc] init] mainViewController:tabBarController rightViewController:nil];
+    viewController.leftViewWidth = 0.80 * SCREENT_WIDTH;
+    [self.window setRootViewController:viewController];
     [self.window makeKeyAndVisible];
     [ZNAppDelegateConfigureManager startConfigureAppDelegate];
     return YES;

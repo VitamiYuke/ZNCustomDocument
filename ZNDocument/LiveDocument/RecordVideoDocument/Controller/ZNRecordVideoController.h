@@ -14,6 +14,6 @@
 
 @property(nonatomic, copy)void(^processedVideo)(ZNOutputVideoModel *);
 
-
+@property(nonatomic, copy)void(^processedImage)(UIImage *);
 
 @end
